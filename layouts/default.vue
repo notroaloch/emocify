@@ -1,0 +1,8 @@
+<template>
+  <div>DEFAULT LAYOUT</div>
+  <slot />
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped></style>
