@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <AuthHero />
-    <AuthSpotifySignInButton />
-  </div>
+  <div>ABOUT PAGE</div>
 </template>
 
 <script setup lang="ts">

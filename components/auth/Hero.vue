@@ -1,8 +1,5 @@
 <template>
-  <AuthNavbar />
-  <UContainer>
-    <slot />
-  </UContainer>
+  <div></div>
 </template>
 
 <script setup lang="ts"></script>
