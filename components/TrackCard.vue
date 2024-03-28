@@ -1,38 +1,40 @@
 <template>
-  <div
-    class="w-[200px] pb-2 flex flex-col gap-5 group cursor-pointer"
-    @click="handleClick"
-  >
+  <!-- MAIN CONTAINER -->
+  <div class="group flex w-[200px] flex-col">
+    <!-- IMAGE ARTWORK -->
     <NuxtImg
       :src="imageURL"
       class="shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
     />
+    <!-- DATA CONTAINER -->
     <div
-      class="flex flex-col gap-2 px-2 group-hover:translate-y-1 transition-transform"
+      class="flex flex-col px-1 py-5 transition-transform group-hover:translate-y-1"
     >
-      <div>
-        <div class="flex items-center">
-          <p
-            class="font-semibold tracking-tight line-clamp-1 group-hover:text-primary"
-          >
-            {{ track.name }}
-          </p>
-          <UIcon
-            name="i-material-symbols-arrow-outward-rounded"
-            class="w-[15px] h-[15px] hidden group-hover:block text-primary"
-          />
-        </div>
-
-        <p class="font-light tracking-tighter line-clamp-1">
-          {{ trackArtists }}
+      <!-- TRACK NAME AND EXTERNAL URL ICON -->
+      <div class="flex cursor-pointer items-center">
+        <p
+          class="group-hover:text-primary line-clamp-1 font-semibold tracking-tight"
+          @click="handleClick"
+        >
+          {{ track.name }}
         </p>
-        <p class="font-extralight tracking-tighter line-clamp-1">
-          {{ track.album.name }}
-        </p>
+        <UIcon
+          name="i-material-symbols-arrow-outward-rounded"
+          class="group-hover:text-primary h-[15px] w-[15px]"
+        />
       </div>
-      <div class="flex items-center gap-1 text-gray-500">
-        <UIcon name="i-mdi-spotify" class="w-[21px] h-[21px]" />
-        <p class="text-sm tracking-tight font-extralight">Datos de Spotify</p>
+      <!-- TRACK ARTISTS -->
+      <p class="line-clamp-1 font-light tracking-tighter">
+        {{ trackArtists }}
+      </p>
+      <!-- TRACK ALBUM -->
+      <p class="line-clamp-1 font-extralight tracking-tighter">
+        {{ track.album.name }}
+      </p>
+      <!-- SPOTIFY DATA ATTRIBUTION -->
+      <div class="mt-2 flex items-center gap-1 text-gray-500">
+        <UIcon name="i-mdi-spotify" class="h-[21px] w-[21px]" />
+        <p class="text-sm font-extralight tracking-tight">Datos de Spotify</p>
       </div>
     </div>
   </div>

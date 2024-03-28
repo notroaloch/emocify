@@ -1,5 +1,9 @@
 <template>
-  <div class="w-ful grid grid-flow-col-dense gap-8 overflow-scroll">
+  <slot name="header"></slot>
+  <div
+    v-dragscroll
+    class="w-ful grid cursor-grab grid-flow-col-dense gap-8 overflow-x-scroll py-1"
+  >
     <slot />
   </div>
 </template>

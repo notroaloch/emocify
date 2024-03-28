@@ -1,33 +1,40 @@
 <template>
-  <div
-    class="w-[200px] group pb-2 flex flex-col gap-5 group cursor-pointer"
-    @click="handleClick"
-  >
+  <!-- MAIN CONTAINER -->
+  <div class="">
+    <!-- IMAGE CONTAINER (CROP OVERFLOW) -->
+    <div>
+      <NuxtImg />
+    </div>
+    <!-- DATA CONTAINER -->
+    <div></div>
+  </div>
+  <!-- <div class="group group flex w-[200px] cursor-pointer flex-col gap-5 pb-2">
     <div
       class="h-[200px] overflow-clip shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
     >
       <NuxtImg :src="imageURL" fit="inside" class="" />
     </div>
     <div
-      class="flex flex-col gap-1 px-2 group-hover:translate-y-1 transition-transform"
+      class="flex flex-col gap-1 px-2 transition-transform group-hover:translate-y-1"
     >
       <div class="flex items-center">
         <p
-          class="font-semibold tracking-tight line-clamp-1 group-hover:text-primary"
+          class="group-hover:text-primary line-clamp-1 font-semibold tracking-tight"
+          @click="handleClick"
         >
           {{ artist.name }}
         </p>
         <UIcon
           name="i-material-symbols-arrow-outward-rounded"
-          class="w-[15px] h-[15px] hidden group-hover:block text-primary"
+          class="text-primary hidden h-[15px] w-[15px] group-hover:block"
         />
       </div>
       <div class="flex items-center gap-1 text-gray-500">
-        <UIcon name="i-mdi-spotify" class="w-[21px] h-[21px]" />
-        <p class="text-sm tracking-tight font-extralight">Datos de Spotify</p>
+        <UIcon name="i-mdi-spotify" class="h-[21px] w-[21px]" />
+        <p class="text-sm font-extralight tracking-tight">Datos de Spotify</p>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
