@@ -1,5 +1,5 @@
 <template>
-  <div>PLAYLISTS PAGE</div>
+  <div>PLAYLIST</div>
 </template>
 
 <script setup lang="ts"></script>

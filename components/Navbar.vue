@@ -53,7 +53,7 @@
       </li>
       <li>
         <ULink
-          @click="handleUserSignOut"
+          @click="signOut"
           active-class="text-primary"
           inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
           >Salir</ULink
@@ -67,14 +67,7 @@
 </template>
 
 <script setup lang="ts">
-  const supabase = useSupabaseClient();
-
-  const handleUserSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      return navigateTo('/auth/login');
-    }
-  };
+  const { signOut } = useAuth();
 </script>
 
 <style scoped></style>

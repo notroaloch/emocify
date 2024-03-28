@@ -11,18 +11,7 @@
 </template>
 
 <script setup lang="ts">
-  const runtimeConfig = useRuntimeConfig();
-  const supabase = useSupabaseClient();
-
-  const signInWithSpotify = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'spotify',
-      options: {
-        redirectTo: runtimeConfig.public.supabaseRedirectUrl,
-        scopes: runtimeConfig.public.spotifyScopes,
-      },
-    });
-  };
+  const { signInWithSpotify } = useAuth();
 </script>
 
 <style scoped></style>
