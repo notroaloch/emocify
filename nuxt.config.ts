@@ -6,6 +6,8 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@nuxtjs/supabase',
     '@vueuse/nuxt',
+    '@pinia/nuxt',
+    '@nuxt/image',
   ],
   supabase: {
     redirectOptions: {
@@ -15,7 +17,7 @@ export default defineNuxtConfig({
     },
   },
   ui: {
-    icons: ['logos', 'streamline'],
+    icons: ['logos', 'streamline', 'mdi', 'material-symbols'],
   },
   googleFonts: {
     families: {

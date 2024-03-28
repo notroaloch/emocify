@@ -1,7 +1,9 @@
 <template>
-  <div>PROFILE PAGE</div>
+  <div>{{ user }}</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  const { user } = useSpotify();
+</script>
 
 <style scoped></style>

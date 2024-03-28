@@ -1,7 +1,9 @@
 <template>
-  <div>PLAYLIST</div>
+  <div>{{ playlists }}</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  const { playlists } = useSpotify();
+</script>
 
 <style scoped></style>
