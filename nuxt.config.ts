@@ -1,6 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  googleFonts: {
+    families: {
+      Poppins: true,
+    },
+    download: true,
+  },
   modules: [
     '@nuxt/ui',
     '@nuxtjs/google-fonts',
@@ -9,6 +15,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
   ],
+  runtimeConfig: {
+    public: {
+      supabaseRedirectUrl: '',
+      spotifyScopes: '',
+    },
+  },
   supabase: {
     redirectOptions: {
       login: '/auth/login',
@@ -18,17 +30,5 @@ export default defineNuxtConfig({
   },
   ui: {
     icons: ['logos', 'streamline', 'mdi', 'material-symbols'],
-  },
-  googleFonts: {
-    families: {
-      Poppins: true,
-    },
-    download: true,
-  },
-  runtimeConfig: {
-    public: {
-      supabaseRedirectUrl: '',
-      spotifyScopes: '',
-    },
   },
 });

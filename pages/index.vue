@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full py-8 flex flex-col gap-12">
+  <div class="flex w-full flex-col gap-12 pb-24 pt-8">
     <div class="flex flex-col gap-6">
       <p class="text-2xl font-bold tracking-tight">Top de Canciones</p>
       <Swiper>

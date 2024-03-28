@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-[calc(100vh-60px)] flex flex-col justify-center items-center gap-20"
+    class="flex h-[calc(100vh-60px)] flex-col items-center justify-center gap-20"
   >
     <div class="flex flex-col gap-12">
       <AuthHero />
@@ -14,5 +14,3 @@
     layout: 'auth',
   });
 </script>
-
-<style scoped></style>

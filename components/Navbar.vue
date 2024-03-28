@@ -1,5 +1,5 @@
 <template>
-  <nav class="h-[60px] flex gap-6 items-center p-4">
+  <nav class="h-[60px] flex gap-6 items-center">
     <div class="flex-1">
       <UButton
         icon="i-streamline-face-scan-1"
