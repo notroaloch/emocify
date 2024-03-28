@@ -1,6 +1,15 @@
 <template>
   <nav class="h-[60px] flex gap-6 items-center p-4">
-    <h1 class="flex-1 text-xl font-bold text-primary">emocify</h1>
+    <div class="flex-1">
+      <UButton
+        icon="i-streamline-face-scan-1"
+        size="sm"
+        color="primary"
+        square
+        variant="link"
+        to="/auth/login"
+      />
+    </div>
     <ul class="flex gap-4 text-sm">
       <li>
         <ULink

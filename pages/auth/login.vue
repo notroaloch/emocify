@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <AuthHero />
-    <AuthSpotifySignInButton />
+  <div
+    class="h-[calc(100vh-60px)] flex flex-col justify-center items-center gap-20"
+  >
+    <div class="flex flex-col gap-12">
+      <AuthHero />
+      <AuthSpotifySignInButton />
+    </div>
   </div>
 </template>
 

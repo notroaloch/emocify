@@ -1,6 +1,10 @@
 <template></template>
 
 <script setup lang="ts">
+  definePageMeta({
+    layout: 'auth',
+  });
+
   const user = useSupabaseUser();
 
   watch(

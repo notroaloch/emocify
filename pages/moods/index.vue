@@ -1,8 +1,5 @@
 <template>
-  <Navbar />
-  <UContainer>
-    <slot />
-  </UContainer>
+  <div>MOODS PAGE</div>
 </template>
 
 <script setup lang="ts"></script>

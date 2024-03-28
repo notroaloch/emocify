@@ -1,8 +1,5 @@
 <template>
-  <Navbar />
-  <UContainer>
-    <slot />
-  </UContainer>
+  <div>SCAN PAGE</div>
 </template>
 
 <script setup lang="ts"></script>
