@@ -1,5 +1,5 @@
 <template>
-  <div>MOODS PAGE</div>
+  <div>INDEX PAGE</div>
 </template>
 
 <script setup lang="ts"></script>

@@ -1,5 +1,5 @@
 <template>
-  <nav class="h-[60px] flex gap-6 items-center">
+  <nav class="flex h-[60px] items-center gap-6">
     <div class="flex-1">
       <UButton
         icon="i-streamline-face-scan-1"
@@ -21,7 +21,7 @@
       </li>
       <li>
         <ULink
-          to="/scan"
+          to="/facescan"
           active-class="text-primary"
           inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
           >FaceScan</ULink

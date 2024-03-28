@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxt/image',
+    '@vueuse/nuxt',
   ],
   runtimeConfig: {
     public: {
