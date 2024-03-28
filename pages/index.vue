@@ -1,21 +1,21 @@
 <template>
-  <div class="flex w-full flex-col gap-12 pb-24 pt-8">
-    <div class="flex flex-col gap-6">
-      <p class="text-2xl font-bold tracking-tight">Top de Canciones</p>
-      <Swiper>
-        <TrackCard v-for="track in topTracks" :key="track.id" :track="track" />
-      </Swiper>
-    </div>
-    <div class="flex flex-col gap-6">
-      <p class="text-2xl font-bold tracking-tight">Artistas Seguidos</p>
-      <Swiper>
-        <ArtistCard
-          v-for="artist in topArtists"
-          :key="artist.id"
-          :artist="artist"
-        />
-      </Swiper>
-    </div>
+  <div class="my-8 flex flex-col gap-8">
+    <Swiper>
+      <template v-slot:header>
+        <p class="text-2xl font-bold tracking-tight">Top de Canciones</p>
+      </template>
+      <TrackCard v-for="track in topTracks" :key="track.id" :track="track" />
+    </Swiper>
+    <Swiper>
+      <template v-slot:header>
+        <p class="text-2xl font-bold tracking-tight">Artistas Seguidos</p>
+      </template>
+      <ArtistCard
+        v-for="artist in followedArtists"
+        :key="artist.id"
+        :artist="artist"
+      />
+    </Swiper>
   </div>
 </template>
 

@@ -2,10 +2,11 @@
   <!-- MAIN CONTAINER -->
   <div class="group flex w-[200px] flex-col">
     <!-- IMAGE ARTWORK -->
-    <NuxtImg
-      :src="imageURL"
-      class="shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
-    />
+    <div
+      class="h-[200px] w-[200px] overflow-clip shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
+    >
+      <NuxtImg :src="imageURL" />
+    </div>
     <!-- DATA CONTAINER -->
     <div
       class="flex flex-col px-1 py-5 transition-transform group-hover:translate-y-1"

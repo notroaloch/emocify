@@ -1,10 +1,12 @@
 <template>
-  <slot name="header"></slot>
-  <div
-    v-dragscroll
-    class="w-ful grid cursor-grab grid-flow-col-dense gap-8 overflow-x-scroll py-1"
-  >
-    <slot />
+  <div class="flex flex-col gap-4">
+    <slot name="header"></slot>
+    <div
+      v-dragscroll
+      class="w-ful grid cursor-grab grid-flow-col-dense gap-8 overflow-x-scroll py-1"
+    >
+      <slot></slot>
+    </div>
   </div>
 </template>
 
