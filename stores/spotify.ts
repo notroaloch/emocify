@@ -5,7 +5,7 @@ export const useSpotifyStore = defineStore('spotify', () => {
     'spotifyUserTopArtists'
   );
   const followedArtists: Ref<Artist[] | undefined> = useState(
-    'spotifyUserTopArtists'
+    'spotifyUserFollowedArtists'
   );
   const playlists: Ref<Playlist[] | undefined> = useState(
     'spotifyUserPlaylists'

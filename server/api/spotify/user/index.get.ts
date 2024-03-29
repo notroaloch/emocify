@@ -1,13 +1,13 @@
 import { spotifyAPI } from '~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
-  const cookies = parseCookies(event);
-  const authToken = cookies['sb-provider-token'];
+  const authToken = getCookie(event, 'oauth_provider_token');
 
   if (!authToken) {
     throw createError({
-      statusCode: 500,
-      statusMessage: '[E500-MC] - Missing auth token in cookies',
+      statusCode: 400,
+      statusMessage:
+        '[E400-MC] - Missing cookie: oauth_provider_token (spotify auth token)',
     });
   }
 

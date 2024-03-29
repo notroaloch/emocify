@@ -4,75 +4,89 @@
   <div>
     <div class="flex items-center gap-2 pt-1">
       <UIcon
-        :name="cameraAccessIcon.name"
+        :name="cameraAccessIcon"
         class="text-green-500"
-        :class="cameraAccessIcon.color"
+        :class="cameraAccessIconColor"
       />
       <p class="text-sm text-gray-500">Permiso para el uso de cámara</p>
     </div>
     <div class="flex items-center gap-2 pt-1">
-      <UIcon :name="cameraStatusIcon.name" :class="cameraStatusIcon.color" />
+      <UIcon :name="cameraStatusIcon" :class="cameraStatusIconColor" />
       <p class="text-sm text-gray-500">Estado de la cámara</p>
     </div>
   </div>
-  <UDivider class="py-4" />
-  <div class="grid grid-cols-4 gap-2">
+  <div class="mt-4 grid grid-cols-4 gap-2">
     <USelect
       class="col-span-3"
       v-model="currentCamera"
       :options="cameras"
-      :disabled="enabled"
+      :disabled="enabled || cameraAccess !== 'granted'"
       value-attribute="deviceId"
       icon="i-material-symbols-video-camera-front-outline-rounded"
       size="md"
       placeholder="Selecciona una cámara"
     />
     <UButton
+      class="transition-all"
       color="primary"
-      variant="ghost"
+      variant="solid"
       block
+      :disabled="cameraAccess !== 'granted'"
       :label="enabled ? 'Apagar' : 'Encender'"
       @click="enabled = !enabled"
     />
   </div>
-  <video autoplay ref="videoComponent" class="h-100 w-auto" />
+  <UDivider class="py-4" />
+  <div
+    v-if="enabled"
+    class="flex flex-col rounded-lg border dark:border-gray-800"
+  >
+    <div class="overflow-clip rounded-t-lg">
+      <video
+        autoplay
+        ref="videoComponent"
+        class="w-full transition-all duration-700 md:w-1/2"
+        :class="{ 'blur-sm': !isFaceMeshActive }"
+      />
+    </div>
+    <div
+      class="grid w-full grid-cols-1"
+      :class="{ 'grid-cols-2': !isFaceMeshActive }"
+    >
+      <UButton
+        block
+        color="primary"
+        variant="ghost"
+        size="xl"
+        class="py-3 transition-all"
+        :ui="{ rounded: 'rounded-none', color: { gray: { solid: 'ring-0' } } }"
+        @click="isFaceMeshActive = !isFaceMeshActive"
+      >
+        {{
+          isFaceMeshActive ? 'Pausar FaceMesh' : 'Reanudar FaceMesh'
+        }}</UButton
+      >
+      <UButton
+        :class="{ hidden: isFaceMeshActive }"
+        block
+        color="primary"
+        variant="ghost"
+        size="xl"
+        class="py-3"
+        :ui="{ rounded: 'rounded-none', color: { gray: { solid: 'ring-0' } } }"
+      >
+        Analizar Emoción
+      </UButton>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
   const currentCamera = ref();
   const videoComponent = ref();
+  const isFaceMeshActive = ref(true);
 
   const cameraAccess = usePermission('camera');
-  const { stream, enabled } = useUserMedia({
-    constraints: {
-      video: { deviceId: currentCamera.value },
-    },
-    autoSwitch: true,
-  });
-
-  const cameraAccessIcon = computed(() => {
-    return {
-      name: [
-        cameraAccess.value === 'granted'
-          ? 'i-material-symbols-check-circle-outline'
-          : 'i-material-symbols-error-circle-rounded-outline-sharp',
-      ],
-      color: [
-        cameraAccess.value === 'granted' ? 'text-green-500' : 'text-red-500',
-      ],
-    };
-  });
-
-  const cameraStatusIcon = computed(() => {
-    return {
-      name: [
-        enabled.value
-          ? 'i-material-symbols-video-camera-front-outline-rounded'
-          : 'i-material-symbols-video-camera-front-off-outline-rounded',
-      ],
-      color: [enabled.value === true ? 'text-green-500' : 'text-red-500'],
-    };
-  });
 
   const { videoInputs: cameras } = useDevicesList({
     requestPermissions: true,
@@ -81,6 +95,33 @@
         currentCamera.value = cameras.value.at(0)?.deviceId;
       }
     },
+  });
+
+  const { stream, enabled } = useUserMedia({
+    constraints: {
+      video: { deviceId: currentCamera.value },
+    },
+    autoSwitch: true,
+  });
+
+  const cameraAccessIcon = computed(() => {
+    return cameraAccess.value === 'granted'
+      ? 'i-material-symbols-check-circle-outline'
+      : 'i-material-symbols-error-circle-rounded-outline-sharp';
+  });
+
+  const cameraAccessIconColor = computed(() => {
+    return cameraAccess.value === 'granted' ? 'text-green-500' : 'text-red-500';
+  });
+
+  const cameraStatusIcon = computed(() => {
+    return enabled.value
+      ? 'i-material-symbols-video-camera-front-outline-rounded'
+      : 'i-material-symbols-video-camera-front-off-outline-rounded';
+  });
+
+  const cameraStatusIconColor = computed(() => {
+    return enabled.value === true ? 'text-green-500' : 'text-red-500';
   });
 
   watchEffect(() => {

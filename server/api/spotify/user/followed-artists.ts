@@ -1,8 +1,7 @@
 import { spotifyAPI } from '~/server/utils/api';
 
 export default defineEventHandler(async (event) => {
-  const cookies = parseCookies(event);
-  const authToken = cookies['sb-provider-token'];
+  const authToken = getCookie(event, 'oauth_provider_token');
 
   const { limit }: { limit: number } = getQuery(event);
 

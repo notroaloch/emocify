@@ -3,46 +3,36 @@ export const useSpotify = () => {
   const { user, topTracks, topArtists, followedArtists, playlists } =
     storeToRefs(spotifyStore);
 
-  watch(
-    [user, topTracks, topArtists, followedArtists, playlists],
-    async ([_user, _topTracks, _topArtists, _followedArtists, _playlists]) => {
-      if (!_user) {
-        const userData: SpotifyUser = await $fetch('/api/spotify/user');
-        user.value = userData;
-        return;
-      }
+  const init = async () => {
+    if (user.value) {
+      return;
+    }
 
-      if (!_topTracks) {
-        const topTracksData: any = await $fetch('/api/spotify/user/top-items', {
-          params: { type: 'tracks' },
-        });
-        topTracks.value = topTracksData;
+    await Promise.all([
+      // USER PROFILE
+      $fetch('/api/spotify/user'),
+      // TOP USER TRACKS
+      $fetch('/api/spotify/user/top-items', {
+        params: { type: 'tracks' },
+      }),
+      // TOP USER ARTISTS
+      $fetch('/api/spotify/user/top-items', {
+        params: { type: 'artists' },
+      }),
+      // USER FOLLOWED ARTISTS
+      $fetch('/api/spotify/user/followed-artists'),
+      // USER PLAYLISTS
+      $fetch('/api/spotify/user/playlists'),
+    ]).then(
+      ([_user, _topTracks, _topArtists, _followedArtists, _playlists]: any) => {
+        user.value = _user;
+        topTracks.value = _topTracks;
+        topArtists.value = _topArtists;
+        followedArtists.value = _followedArtists;
+        playlists.value = _playlists;
       }
+    );
+  };
 
-      if (!_topArtists) {
-        const topArtistsData: any = await $fetch(
-          '/api/spotify/user/top-items',
-          {
-            params: { type: 'artists' },
-          }
-        );
-        topArtists.value = topArtistsData;
-      }
-
-      if (!_followedArtists) {
-        const followedArtistsData: any = await $fetch(
-          '/api/spotify/user/followed-artists'
-        );
-        followedArtists.value = followedArtistsData;
-      }
-
-      if (!_playlists) {
-        const playlistsData: any = await $fetch('/api/spotify/user/playlists');
-        playlists.value = playlistsData;
-      }
-    },
-    { immediate: true }
-  );
-
-  return { user, topTracks, topArtists, followedArtists, playlists };
+  return { user, topTracks, topArtists, followedArtists, playlists, init };
 };

@@ -11,7 +11,6 @@
     user,
     () => {
       if (user.value) {
-        useSpotify();
         return navigateTo('/');
       }
     },
