@@ -1,6 +1,7 @@
 export const useAuth = () => {
   const runtimeConfig = useRuntimeConfig();
   const supabase = useSupabaseClient();
+
   const providerAuthToken = useCookie('oauth_provider_token');
   const providerAuthRefreshToken = useCookie('oauth_provider_refresh_token');
 
@@ -21,8 +22,8 @@ export const useAuth = () => {
     if (event === 'SIGNED_OUT') {
       localStorage.removeItem('oauth_provider_token');
       localStorage.removeItem('oauth_provider_refresh_token');
-      providerAuthToken.value = '';
-      providerAuthRefreshToken.value = '';
+      providerAuthToken.value = null;
+      providerAuthRefreshToken.value = null;
     }
   });
 

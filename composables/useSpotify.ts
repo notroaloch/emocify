@@ -8,21 +8,25 @@ export const useSpotify = () => {
       return;
     }
 
+    const headers = useRequestHeaders(['cookie']);
+
     await Promise.all([
       // USER PROFILE
-      $fetch('/api/spotify/user'),
+      $fetch('/api/spotify/user', { headers }),
       // TOP USER TRACKS
       $fetch('/api/spotify/user/top-items', {
         params: { type: 'tracks' },
+        headers,
       }),
       // TOP USER ARTISTS
       $fetch('/api/spotify/user/top-items', {
         params: { type: 'artists' },
+        headers,
       }),
       // USER FOLLOWED ARTISTS
-      $fetch('/api/spotify/user/followed-artists'),
+      $fetch('/api/spotify/user/followed-artists', { headers }),
       // USER PLAYLISTS
-      $fetch('/api/spotify/user/playlists'),
+      $fetch('/api/spotify/user/playlists', { headers }),
     ]).then(
       ([_user, _topTracks, _topArtists, _followedArtists, _playlists]: any) => {
         user.value = _user;

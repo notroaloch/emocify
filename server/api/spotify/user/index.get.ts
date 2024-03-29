@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       statusMessage:
-        '[E400-MC] - Missing cookie: oauth_provider_token (spotify auth token)',
+        '[E400-MC] - Missing cookie: oauth_provider_token (spotify auth token) ',
     });
   }
 
