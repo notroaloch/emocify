@@ -1,50 +1,5 @@
 <template>
   <ClientOnly>
-    <p class="text-2xl font-bold tracking-tight">FaceScan</p>
-    <UDivider class="py-2" />
-    <div>
-      <div class="flex items-center gap-2 pt-1">
-        <UIcon
-          :name="cameraAccessIcon"
-          class="text-green-500"
-          :class="cameraAccessIconColor"
-        />
-        <p class="text-sm text-gray-500">Permiso para el uso de cámara</p>
-      </div>
-      <div class="flex items-center gap-2 pt-1">
-        <UIcon :name="cameraStatusIcon" :class="cameraStatusIconColor" />
-        <p class="text-sm text-gray-500">Estado de la cámara</p>
-      </div>
-    </div>
-    <div class="mt-4 grid grid-cols-4 gap-2">
-      <USelect
-        class="col-span-3"
-        v-model="currentCamera"
-        :options="cameras"
-        :disabled="enabled || cameraAccess !== 'granted'"
-        value-attribute="deviceId"
-        icon="i-material-symbols-video-camera-front-outline-rounded"
-        size="md"
-        placeholder="Selecciona una cámara"
-      />
-      <UButton
-        class="transition-all"
-        color="primary"
-        variant="solid"
-        block
-        :disabled="cameraAccess !== 'granted'"
-        :label="enabled ? 'Apagar' : 'Encender'"
-        @click="
-          () => {
-            if (enabled && !isFaceMeshActive) {
-              isFaceMeshActive = true;
-            }
-            enabled = !enabled;
-          }
-        "
-      />
-    </div>
-    <UDivider class="py-4" />
     <div
       v-show="enabled"
       class="flex flex-col overflow-clip rounded-xl shadow-xl md:w-1/2"

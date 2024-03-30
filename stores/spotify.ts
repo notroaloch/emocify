@@ -1,4 +1,4 @@
-export const useSpotifyStore = defineStore('spotify', () => {
+export const useSpotifyStore = defineStore('spotifyStore', () => {
   const user: Ref<SpotifyUser | undefined> = useState('spotifyUser');
   const topTracks: Ref<Track[] | undefined> = useState('spotifyUserTopTracks');
   const topArtists: Ref<Artist[] | undefined> = useState(
