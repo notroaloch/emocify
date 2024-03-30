@@ -2,8 +2,12 @@ export const useAuth = () => {
   const runtimeConfig = useRuntimeConfig();
   const supabase = useSupabaseClient();
 
-  const providerAuthToken = useCookie('oauth_provider_token');
-  const providerAuthRefreshToken = useCookie('oauth_provider_refresh_token');
+  const providerAuthToken = useCookie('oauth_provider_token', {
+    maxAge: 3600,
+  });
+  const providerAuthRefreshToken = useCookie('oauth_provider_refresh_token', {
+    maxAge: 3600,
+  });
 
   supabase.auth.onAuthStateChange((event, session) => {
     if (session && session.provider_token) {

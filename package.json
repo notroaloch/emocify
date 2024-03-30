@@ -10,10 +10,12 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/line-md": "^1.1.37",
     "@iconify-json/logos": "^1.1.42",
     "@iconify-json/material-symbols": "^1.1.76",
     "@iconify-json/mdi": "^1.1.64",
     "@iconify-json/streamline": "^1.1.8",
+    "@mediapipe/tasks-vision": "^0.10.12",
     "@nuxt/image": "^1.4.0",
     "@nuxt/ui": "^2.15.0",
     "@pinia/nuxt": "^0.5.1",

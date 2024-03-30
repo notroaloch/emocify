@@ -1,4 +1,5 @@
 export const useSpotify = () => {
+  const headers = useRequestHeaders(['cookie']);
   const spotifyStore = useSpotifyStore();
   const { user, topTracks, topArtists, followedArtists, playlists } =
     storeToRefs(spotifyStore);
@@ -7,8 +8,6 @@ export const useSpotify = () => {
     if (user.value) {
       return;
     }
-
-    const headers = useRequestHeaders(['cookie']);
 
     await Promise.all([
       // USER PROFILE

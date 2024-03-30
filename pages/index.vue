@@ -1,5 +1,11 @@
 <template>
-  <div class="my-8 flex flex-col gap-8">
+  <div
+    v-if="isLoading"
+    class="flex h-screen w-screen animate-pulse items-center justify-center"
+  >
+    <p class="">Descargando datos de Spotify</p>
+  </div>
+  <div v-else class="my-8 flex flex-col gap-8">
     <UiSwiper>
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
@@ -47,8 +53,14 @@
 </template>
 
 <script setup lang="ts">
-  const { init, topTracks, topArtists, followedArtists } = useSpotify();
-  await init();
+  const isLoading = useState('isLoadingIndexInit', () => true);
+  const { topTracks, topArtists, followedArtists } = useSpotify();
+
+  callOnce('initSpotify', async () => {
+    const { init } = useSpotify();
+    await init();
+    isLoading.value = false;
+  });
 </script>
 
 <style scoped></style>

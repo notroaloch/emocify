@@ -30,6 +30,6 @@ export default defineNuxtConfig({
     },
   },
   ui: {
-    icons: ['logos', 'streamline', 'mdi', 'material-symbols'],
+    icons: ['logos', 'streamline', 'mdi', 'material-symbols', 'line-md'],
   },
 });
