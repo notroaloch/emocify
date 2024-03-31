@@ -1,14 +1,9 @@
 <template>
-  <div class="my-8">
-    <p class="text-2xl font-bold tracking-tight">FaceScan</p>
-    <div class="mt-2">
-      <div class="flex flex-col gap-2">
-        <UDivider />
-        <FaceScanVideoDeviceSelector />
-        <UDivider />
-      </div>
-    </div>
-  </div>
+  <!-- NEEDED TO PREVENT DOCUMENT UNDEFINED ERROR WHEN SSR -->
+  <ClientOnly>
+    <!-- IT NEEDS TO BE A SINGLE COMPONENT -->
+    <FaceScanVideo />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts"></script>

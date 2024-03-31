@@ -3,7 +3,8 @@
 </template>
 
 <script setup lang="ts">
-  const { playlists } = useSpotify();
+  const { init, playlists } = useSpotify();
+  await init();
 </script>
 
 <style scoped></style>
