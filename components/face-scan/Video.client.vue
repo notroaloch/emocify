@@ -29,13 +29,13 @@
           </div>
           <!-- CAMERA SELECTOR AND ENABLE/DISABLE BUTTON -->
           <div class="grid grid-cols-4 gap-2">
-            <USelect
+            <USelectMenu
               size="md"
               class="col-span-3"
               placeholder="Selecciona una cámara"
               icon="i-material-symbols-video-camera-front-outline-rounded"
-              v-model="currentVideoDeviceID"
-              value-attribute="deviceId"
+              v-model="currentVideoDevice"
+              by="deviceId"
               :options="videoDevices"
               :disabled="isStreaming || cameraPermission !== 'granted'"
             />
@@ -44,9 +44,7 @@
               class="transition-all"
               color="primary"
               variant="solid"
-              :disabled="
-                cameraPermission !== 'granted' || !currentVideoDeviceID
-              "
+              :disabled="cameraPermission !== 'granted' || !currentVideoDevice"
               :label="isStreaming ? 'Apagar' : 'Encender'"
               @click="handleStreamingToggle"
             />
@@ -92,7 +90,7 @@
             :class="{
               hidden: isFaceMeshActive || results.faceLandmarks.length === 0,
             }"
-            @click=""
+            @click="handleFaceMeshScan"
           />
         </div>
       </div>
@@ -111,13 +109,21 @@
 
   // VIDEO FEED RELATED
   const cameraPermission = usePermission('camera');
-  const currentVideoDeviceID = useState('currentVideoDeviceID');
+  const currentVideoDevice: Ref<MediaDeviceInfo> =
+    useState('currentVideoDevice');
+
+  const currentVideoDeviceID = computed(() => {
+    if (currentVideoDevice.value) {
+      return currentVideoDevice.value.deviceId;
+    }
+    return undefined;
+  });
 
   const { videoInputs: videoDevices } = useDevicesList({
     requestPermissions: true,
     onUpdated() {
-      if (!currentVideoDeviceID.value) {
-        currentVideoDeviceID.value = videoDevices.value.at(0)?.deviceId;
+      if (!currentVideoDevice.value) {
+        currentVideoDevice.value = videoDevices.value.at(0)!;
       }
     },
   });
@@ -129,10 +135,9 @@
   const { stream, enabled: isStreaming } = useUserMedia({
     constraints: {
       video: {
-        deviceId: currentVideoDeviceID.value!,
+        deviceId: currentVideoDeviceID.value,
       },
     },
-    autoSwitch: true,
   });
 
   watchEffect(() => {
@@ -156,6 +161,10 @@
     predictWebcam();
   };
 
+  const handleFaceMeshScan = () => {
+    faceLandmarkerResult.value = results.value;
+  };
+
   import {
     FilesetResolver,
     FaceLandmarker,
@@ -164,7 +173,9 @@
 
   const canvasCtx: any = useState('canvasCtx');
   const lastVideoTime: Ref<number> = useState('lastVideoTime', () => -1);
-  const results: any = useState('faceMeshResults');
+  const results: any = useState('results');
+  const { faceLandmarkerResult } = useFaceMesh();
+
   const drawingUtils: any = useState('drawingUtils');
 
   onMounted(async () => {

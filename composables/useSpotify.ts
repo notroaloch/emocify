@@ -4,32 +4,6 @@ export const useSpotify = () => {
   const { user, topTracks, topArtists, followedArtists, playlists } =
     storeToRefs(spotifyStore);
 
-  const fetchUserProfile = async () => {
-    await $fetch('/api/spotify/user', { headers });
-  };
-
-  const fetchUserTopTracks = async () => {
-    await $fetch('/api/spotify/user/top-items', {
-      params: { type: 'tracks' },
-      headers,
-    });
-  };
-
-  const fetchUserTopArtists = async () => {
-    await $fetch('/api/spotify/user/top-items', {
-      params: { type: 'artists' },
-      headers,
-    });
-  };
-
-  const fetchUserFollowedArtists = async () => {
-    await $fetch('/api/spotify/user/followed-artists', { headers });
-  };
-
-  const fetchUserPlaylists = async () => {
-    await $fetch('/api/spotify/user/playlists', { headers });
-  };
-
   const init = async () => {
     if (user.value) {
       return;
@@ -70,10 +44,5 @@ export const useSpotify = () => {
     followedArtists,
     playlists,
     init,
-    fetchUserProfile,
-    fetchUserTopTracks,
-    fetchUserTopArtists,
-    fetchUserFollowedArtists,
-    fetchUserPlaylists,
   };
 };
