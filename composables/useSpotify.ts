@@ -1,8 +1,14 @@
 export const useSpotify = () => {
   const headers = useRequestHeaders(['cookie']);
   const spotifyStore = useSpotifyStore();
-  const { user, topTracks, topArtists, followedArtists, playlists } =
-    storeToRefs(spotifyStore);
+  const {
+    user,
+    topTracks,
+    topArtists,
+    followedArtists,
+    playlists,
+    currentPlaylist,
+  } = storeToRefs(spotifyStore);
 
   const init = async () => {
     if (user.value) {
@@ -43,6 +49,7 @@ export const useSpotify = () => {
     topArtists,
     followedArtists,
     playlists,
+    currentPlaylist,
     init,
   };
 };

@@ -1,9 +1,9 @@
 <template>
-  <div class="my-8">
+  <div class="mb-8 mt-2">
     <p class="text-2xl font-bold tracking-tight">FaceScan</p>
     <div class="mt-4 flex flex-col gap-8">
       <!-- VIDEO SELECTOR -->
-      <div class="flex flex-col gap-2 md:w-1/2">
+      <div class="flex flex-col gap-2">
         <UDivider />
         <div class="flex flex-col gap-2">
           <!-- CAMERA INFO -->
@@ -55,7 +55,7 @@
       <!-- VIDEO PREVIEW -->
       <div
         v-show="isStreaming"
-        class="relative w-full overflow-clip rounded-xl shadow-xl md:w-1/2"
+        class="relative mx-auto w-full overflow-clip rounded-xl shadow-xl md:w-2/3"
       >
         <!-- VIDEO -->
         <video

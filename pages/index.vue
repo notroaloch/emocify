@@ -8,7 +8,7 @@
   >
     <p class="">Descargando datos de Spotify</p>
   </div>
-  <div v-else class="my-8 flex flex-col gap-8">
+  <div v-else class="mb-8 mt-2 flex flex-col gap-8">
     <UiSwiper>
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>

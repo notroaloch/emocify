@@ -11,5 +11,15 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
     'spotifyUserPlaylists'
   );
 
-  return { user, topTracks, topArtists, followedArtists, playlists };
+  const currentPlaylist: Ref<Playlist> | undefined =
+    useState('currentPlaylist');
+
+  return {
+    user,
+    topTracks,
+    topArtists,
+    followedArtists,
+    playlists,
+    currentPlaylist,
+  };
 });
