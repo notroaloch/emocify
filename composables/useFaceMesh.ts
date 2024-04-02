@@ -1,6 +1,10 @@
+import type { FaceLandmarkerResult } from '@mediapipe/tasks-vision';
+
 export const useFaceMesh = () => {
   const faceMeshStore = useFaceMeshStore();
-  const { faceLandmarkerResult } = storeToRefs(faceMeshStore);
+  const { faceMesh } = storeToRefs(faceMeshStore);
 
-  return { faceLandmarkerResult };
+  return {
+    faceMesh,
+  };
 };

@@ -83,17 +83,24 @@
             @click="handleFaceMeshToggle"
           />
           <!-- SCAN FACEMESH BUTTON -->
-          <!-- TODO: HANDLE CLICK  -->
           <UIcon
             name="i-streamline-face-scan-1"
-            class="h-6 w-6 cursor-pointer text-white transition-transform hover:scale-110"
+            class="h-6 w-6 cursor-pointer transition-transform hover:scale-110"
             :class="{
+              'text-gray-500': isLoadingClassifier,
               hidden: isFaceMeshActive || results.faceLandmarks.length === 0,
             }"
             @click="handleFaceMeshScan"
           />
         </div>
       </div>
+      <!-- MODAL RESULTS CARD -->
+      <UModal v-model="isResultsModalOpen" prevent-close>
+        <FaceScanResultsCard
+          v-model="isResultsModalOpen"
+          @close-modal="handleModalClose"
+        />
+      </UModal>
     </div>
   </div>
 </template>
@@ -150,20 +157,12 @@
     if (isStreaming.value && !isFaceMeshActive.value) {
       isFaceMeshActive.value = true;
     }
+
     isStreaming.value = !isStreaming.value;
+    faceMesh.value = undefined;
   };
 
   // MEDIAPIPE FACE MESH RELATED
-  const isFaceMeshActive = useState('isFaceMeshActive', () => true);
-
-  const handleFaceMeshToggle = () => {
-    isFaceMeshActive.value = !isFaceMeshActive.value;
-    predictWebcam();
-  };
-
-  const handleFaceMeshScan = () => {
-    faceLandmarkerResult.value = results.value;
-  };
 
   import {
     FilesetResolver,
@@ -171,12 +170,42 @@
     DrawingUtils,
   } from '@mediapipe/tasks-vision';
 
+  const { faceMesh } = useFaceMesh();
+  const { currentMood, newMoodFromFaceMesh } = useMood();
+  const isFaceMeshActive = useState('isFaceMeshActive', () => true);
+  const isLoadingClassifier = useState('isLoadingClassifier', () => false);
+  const isResultsModalOpen = useState('isResultsModalOpen', () => false);
   const canvasCtx: any = useState('canvasCtx');
   const lastVideoTime: Ref<number> = useState('lastVideoTime', () => -1);
   const results: any = useState('results');
-  const { faceLandmarkerResult } = useFaceMesh();
-
   const drawingUtils: any = useState('drawingUtils');
+
+  const handleFaceMeshToggle = () => {
+    if (!isFaceMeshActive.value) {
+      faceMesh.value = undefined;
+    }
+
+    isFaceMeshActive.value = !isFaceMeshActive.value;
+    predictWebcam();
+  };
+
+  const handleFaceMeshScan = async () => {
+    isLoadingClassifier.value = true;
+    isFaceMeshActive.value = false;
+    isResultsModalOpen.value = true;
+
+    faceMesh.value = results.value;
+    await newMoodFromFaceMesh(faceMesh.value!);
+  };
+
+  const handleModalClose = () => {
+    isLoadingClassifier.value = false;
+    currentMood.value = undefined;
+    isFaceMeshActive.value = true;
+    isResultsModalOpen.value = false;
+    faceMesh.value = undefined;
+    predictWebcam();
+  };
 
   onMounted(async () => {
     await nextTick();

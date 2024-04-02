@@ -7,7 +7,7 @@
       v-if="!userPlaylists || userPlaylists.length === 0"
     />
     <div v-else>
-      <div class="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-4">
+      <div class="mt-6 flex flex-col gap-4 lg:grid lg:grid-cols-4">
         <USelectMenu
           class="lg:hidden"
           :disabled="isLoading"
@@ -21,6 +21,7 @@
           class="hidden border-r pr-1 lg:col-span-1 lg:block dark:border-gray-800"
         />
         <iframe
+          allow="encrypted-media"
           v-show="currentPlaylist"
           class="min-h-[600px] w-full rounded-xl lg:col-span-3"
           :src="iFrameURL"

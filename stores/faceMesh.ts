@@ -1,9 +1,8 @@
 import type { FaceLandmarkerResult } from '@mediapipe/tasks-vision';
 
-export const useFaceMeshStore = defineStore('faceMeshStore', () => {
-  const faceLandmarkerResult: Ref<FaceLandmarkerResult | undefined> = useState(
-    'faceLandmarkerResult'
-  );
+export const useFaceMeshStore = defineStore('faceMesh', () => {
+  const faceMesh: Ref<FaceLandmarkerResult | undefined> =
+    useState('faceMesh-faceMesh');
 
-  return { faceLandmarkerResult };
+  return { faceMesh };
 });

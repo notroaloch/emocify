@@ -1,6 +1,5 @@
-<!-- TODO: IMPLEMENT AND BIND MOODS WITH MOODCARD COMPONENT -->
-<!-- TODO: ADD SHOW ALL CARD/BUTTON IN MOOD SWIPER -->
-<!-- TODO: IMPLEMENT BETTER "NO DATA" COMPONENT -->
+<!-- TODO: NO DATA MOODS COMPONENT -->
+<!-- TODO: NEW MOOD IN MOOD SWIPER HEADER -->
 <template>
   <div class="mb-8 mt-2 flex flex-col gap-8">
     <!-- MOODS SWIPER -->
@@ -8,7 +7,7 @@
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
       </template>
-      <MoodCard v-for="mood in moods" :key="mood" :mood="mood" />
+      <MoodCard v-for="mood in moods" :key="mood.id" :mood="mood" />
     </UiSwiper>
 
     <UDivider label="Estadísticas de Spotify" />
@@ -81,7 +80,14 @@
     getUserFollowedArtists,
   } = useSpotify();
 
-  const moods = useState('moods', () => [1, 2, 3]);
+  const { moods, getMoods } = useMood();
+
+  const { pending: isLoadingMoods } = useAsyncData(
+    'isLoadingMoods',
+    async () => {
+      return await getMoods();
+    }
+  );
 
   const { pending: isLoadingUserTopTracks } = useAsyncData(
     'isLoadingUserTopTracks',

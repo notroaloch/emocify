@@ -1,4 +1,31 @@
-interface SpotifyUser {
+type Mood = {
+  id?: string;
+  emotion: string;
+  classifierModel: string;
+  linkedPlaylist?: string;
+  faceLandmarks: FaceLandmark[];
+  faceBlendshapes: FaceBlendshape[];
+  faceMatrix: number[];
+  createdAt?: string;
+  userID?: string;
+};
+
+type FaceLandmark = {
+  x: number;
+  y: number;
+  z: number;
+};
+
+type FaceBlendshape = {
+  index: number;
+  displayName: string;
+  categoryName: string;
+  score: number;
+};
+
+// SPOTIFY INTERFACES
+
+type SpotifyUser = {
   country: string;
   display_name: string;
   email: string;
@@ -13,9 +40,9 @@ interface SpotifyUser {
   product: string;
   type: string;
   uri: string;
-}
+};
 
-interface Artist {
+type Artist = {
   external_urls: { spotify: string };
   followers: { href: string; total: number };
   genres: string[];
@@ -26,9 +53,9 @@ interface Artist {
   popularity: number;
   type: string;
   uri: string;
-}
+};
 
-interface Track {
+type Track = {
   album: Album;
   artists: Artist[];
   available_markets: string[];
@@ -49,9 +76,9 @@ interface Track {
   type: string;
   uri: string;
   is_local: boolean;
-}
+};
 
-interface Album {
+type Album = {
   album_type: string;
   total_tracks: number;
   available_markets: string[];
@@ -66,18 +93,18 @@ interface Album {
   type: string;
   uri: string;
   artists: AlbumArtist[];
-}
+};
 
-interface AlbumArtist {
+type AlbumArtist = {
   external_urls: { spotify: string };
   href: string;
   id: string;
   name: string;
   type: string;
   uri: string;
-}
+};
 
-interface Playlist {
+type Playlist = {
   collaborative: boolean;
   description: string;
   external_urls: { spotify: string };
@@ -100,9 +127,9 @@ interface Playlist {
   };
   type: string;
   uri: string;
-}
+};
 
-interface PlaylistOwner {
+type PlaylistOwner = {
   external_urls: { spotify: string };
   followers?: { href: string; total: number };
   href: string;
@@ -111,10 +138,10 @@ interface PlaylistOwner {
   uri: string;
   display_name?: string;
   name?: string;
-}
+};
 
-interface Image {
+type Image = {
   url: string;
   height: number;
   width: number;
-}
+};
