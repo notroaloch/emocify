@@ -2,7 +2,7 @@
   <div class="mb-8 mt-2 flex flex-col gap-4">
     <p class="text-2xl font-bold tracking-tight">Perfil</p>
     <div
-      class="flex w-full gap-8 overflow-clip rounded-lg border p-6 shadow-lg dark:border-gray-800"
+      class="flex w-full gap-8 overflow-clip rounded-lg border p-6 shadow-lg md:w-1/2 dark:border-gray-800"
     >
       <Ui3DCard>
         <NuxtImg
@@ -55,16 +55,14 @@
 </template>
 
 <script setup lang="ts">
-  const { init, user } = useSpotify();
-  await init();
+  const { user, getUser } = useSpotify();
 
-  const handleClick = async () => {
-    await navigateTo(user.value?.external_urls.spotify, {
-      open: {
-        target: '_blank',
-      },
-    });
-  };
+  const { pending: isLoading } = useAsyncData(
+    'isLoadingUserPlaylists',
+    async () => {
+      return await getUser();
+    }
+  );
 
   const countryIcon = computed(() => {
     return 'i-circle-flags-' + user.value?.country.toLowerCase();
@@ -75,6 +73,14 @@
       ? 'Spotify Básico'
       : 'Spotify Premium';
   });
+
+  const handleClick = async () => {
+    await navigateTo(user.value?.external_urls.spotify, {
+      open: {
+        target: '_blank',
+      },
+    });
+  };
 </script>
 
 <style scoped></style>

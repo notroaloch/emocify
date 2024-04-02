@@ -1,35 +1,49 @@
 <template>
   <div class="mb-8 mt-2">
     <p class="text-2xl font-bold tracking-tight">Playlists</p>
-    <div class="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-4">
-      <USelectMenu
-        class="lg:hidden"
-        v-model="currentPlaylist"
-        :options="playlists"
-        option-attribute="name"
-        by="id"
-      />
-      <UVerticalNavigation
-        :links="playlistNavigationItems"
-        class="hidden border-r pr-1 lg:col-span-1 lg:block dark:border-gray-800"
-      />
-      <iframe
-        v-show="currentPlaylist"
-        class="min-h-[600px] w-full rounded-xl lg:col-span-3"
-        :src="iFrameURL"
-        frameborder="0"
-      />
+    <UiNoDataCard
+      class="mt-4"
+      label="No tienes ninguna playlist en Spotify"
+      v-if="!userPlaylists || userPlaylists.length === 0"
+    />
+    <div v-else>
+      <div class="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-4">
+        <USelectMenu
+          class="lg:hidden"
+          :disabled="isLoading"
+          v-model="currentPlaylist"
+          :options="userPlaylists"
+          option-attribute="name"
+          by="id"
+        />
+        <UVerticalNavigation
+          :links="playlistNavigationItems"
+          class="hidden border-r pr-1 lg:col-span-1 lg:block dark:border-gray-800"
+        />
+        <iframe
+          v-show="currentPlaylist"
+          class="min-h-[600px] w-full rounded-xl lg:col-span-3"
+          :src="iFrameURL"
+          frameborder="0"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  const { init, currentPlaylist, playlists } = useSpotify();
-  await init();
+  const { userPlaylists, getUserPlaylists, currentPlaylist } = useSpotify();
+
+  const { pending: isLoading } = useAsyncData(
+    'isLoadingUserPlaylists',
+    async () => {
+      return await getUserPlaylists();
+    }
+  );
 
   const iFrameURL = computed(() => {
     if (!currentPlaylist.value) {
-      currentPlaylist.value = playlists.value?.at(0)!;
+      currentPlaylist.value = userPlaylists.value?.at(0)!;
     }
 
     if (currentPlaylist.value) {
@@ -38,7 +52,7 @@
   });
 
   const playlistNavigationItems = computed(() => {
-    return playlists.value?.map((playlist) => {
+    return userPlaylists.value?.map((playlist) => {
       return {
         label: playlist.name,
         labelClass:
