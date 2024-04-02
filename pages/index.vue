@@ -7,7 +7,12 @@
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
       </template>
-      <MoodCard v-for="mood in moods" :key="mood.id" :mood="mood" />
+      <MoodCard
+        v-if="lastFiveMoods"
+        v-for="mood in lastFiveMoods"
+        :key="mood"
+        :mood="mood"
+      />
     </UiSwiper>
 
     <UDivider label="Estadísticas de Spotify" />
@@ -81,6 +86,18 @@
   } = useSpotify();
 
   const { moods, getMoods } = useMood();
+  const lastFiveMoods = useState('lastFiveMoods');
+
+  watch(moods, () => {
+    if (!moods || moods.value?.length === 0) return;
+
+    if (moods.value?.length! >= 5) {
+      lastFiveMoods.value = moods.value?.slice(0, 5);
+      return;
+    }
+
+    lastFiveMoods.value = moods.value;
+  });
 
   const { pending: isLoadingMoods } = useAsyncData(
     'isLoadingMoods',

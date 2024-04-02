@@ -30,7 +30,10 @@
           <!-- COUNTRY -->
           <UBadge color="white" variant="solid" class="w-fit">
             <div class="flex gap-2">
-              <UIcon :name="countryIcon" class="h-[15px] w-[15px]" />
+              <UIcon
+                :name="countryIcon ? countryIcon : 'i-material-symbols-globe'"
+                class="h-[15px] w-[15px]"
+              />
               <p>{{ user?.country }}</p>
             </div>
           </UBadge>
@@ -56,6 +59,8 @@
 
 <script setup lang="ts">
   const { user, getUser } = useSpotify();
+  const countryIcon = useState('countryIcon');
+  const productType = useState('productType');
 
   const { pending: isLoading } = useAsyncData(
     'isLoadingUserPlaylists',
@@ -64,14 +69,11 @@
     }
   );
 
-  const countryIcon = computed(() => {
-    return 'i-circle-flags-' + user.value?.country.toLowerCase();
-  });
-
-  const productType = computed(() => {
-    return user.value?.product === 'free'
-      ? 'Spotify Básico'
-      : 'Spotify Premium';
+  watch(user, () => {
+    if (!user) return;
+    countryIcon.value = 'i-circle-flags-' + user.value?.country.toLowerCase();
+    productType.value =
+      user.value?.product === 'free' ? 'Spotify Básico' : 'Spotify Premium';
   });
 
   const handleClick = async () => {

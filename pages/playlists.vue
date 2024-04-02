@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
   const { userPlaylists, getUserPlaylists, currentPlaylist } = useSpotify();
+  const playlistNavigationItems = useState('playlistNavigationItems');
 
   const { pending: isLoading } = useAsyncData(
     'isLoadingUserPlaylists',
@@ -52,12 +53,13 @@
     }
   });
 
-  const playlistNavigationItems = computed(() => {
-    return userPlaylists.value?.map((playlist) => {
+  watch([userPlaylists, currentPlaylist], () => {
+    console.log(currentPlaylist.value);
+    playlistNavigationItems.value = userPlaylists.value?.map((playlist) => {
       return {
         label: playlist.name,
         labelClass:
-          currentPlaylist.value === playlist
+          currentPlaylist.value.id === playlist.id
             ? 'text-primary border-l-4 pl-2 border-primary transition-all'
             : '',
         click: () => {
@@ -65,6 +67,7 @@
         },
       };
     });
+    currentPlaylist.value = currentPlaylist.value;
   });
 </script>
 
