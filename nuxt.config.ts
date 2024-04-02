@@ -2,8 +2,8 @@
 export default defineNuxtConfig({
   dayjs: {
     plugins: ['relativeTime', 'utc', 'timezone'],
-    locales: ['es-MX', 'en'],
-    defaultLocale: 'es-MX',
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
     defaultTimezone: '',
   },
   devtools: { enabled: true },
