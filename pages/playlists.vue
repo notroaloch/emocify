@@ -54,7 +54,10 @@
   });
 
   watch([userPlaylists, currentPlaylist], () => {
-    console.log(currentPlaylist.value);
+    if (!currentPlaylist.value || !userPlaylists.value) {
+      return;
+    }
+
     playlistNavigationItems.value = userPlaylists.value?.map((playlist) => {
       return {
         label: playlist.name,

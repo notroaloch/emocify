@@ -2,9 +2,9 @@
   <UButton
     class="w-fit"
     icon="i-logos-spotify-icon"
-    size="lg"
+    size="xl"
     color="black"
-    variant="ghost"
+    variant="outline"
     label="Iniciar Sesión con Spotify"
     @click="signInWithSpotify"
   />
