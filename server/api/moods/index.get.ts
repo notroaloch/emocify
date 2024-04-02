@@ -8,7 +8,8 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await supabase
     .from('moods')
     .select('*')
-    .eq('userID', user?.id!);
+    .eq('userID', user?.id!)
+    .order('createdAt', { ascending: false });
 
   if (error) {
     throw createError({

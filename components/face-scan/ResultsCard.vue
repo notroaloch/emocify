@@ -37,21 +37,34 @@
           <p class="text-2xl font-bold">{{ currentMood?.classifierModel }}</p>
         </div>
         <UDivider />
+
         <div>
           <p class="text-xs uppercase tracking-tight text-gray-500">
             FECHA DE CREACION
           </p>
-          <p class="text-xs text-gray-500">{{ currentMood?.createdAt }}</p>
+          <p class="text-xs text-gray-500">
+            {{ getFormattedDate(currentMood?.createdAt!) }}
+          </p>
         </div>
         <div>
           <p class="text-xs uppercase tracking-tight text-gray-500">
             PLAYLIST VINCULADA
           </p>
-          <p class="text-xs text-gray-500">{{ currentMood?.linkedPlaylist }}</p>
+          <p class="text-xs text-gray-500">
+            {{
+              currentMood?.linkedPlaylist ? currentMood?.linkedPlaylist : 'NO'
+            }}
+          </p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-tight text-gray-500">
+            IDENTIFICADOR
+          </p>
+          <p class="text-xs text-gray-500">{{ currentMood?.id }}</p>
         </div>
       </div>
     </div>
-    <div v-else>Cargando</div>
+    <div v-else class="animate-pulse text-center">Procesando FaceMesh</div>
     <template #footer>
       <UButton block color="primary" variant="soft">Generar Playlist</UButton>
     </template>
@@ -65,17 +78,17 @@
     let url;
 
     switch (currentMood.value!.emotion.toUpperCase()) {
-      case 'ANGRINESS':
-        url = '/images/moods/angriness.png';
+      case 'ENOJO':
+        url = '/images/moods/angry.png';
         break;
-      case 'SADNESS':
-        url = '/images/moods/sadness.png';
+      case 'TRISTEZA':
+        url = '/images/moods/sad.png';
         break;
-      case 'NEUTRALNESS':
-        url = '/images/moods/neutralness.png';
+      case 'NEUTRAL':
+        url = '/images/moods/neutral.png';
         break;
-      case 'HAPPINESS':
-        url = '/images/moods/happiness.png';
+      case 'FELICIDAD':
+        url = '/images/moods/happy.png';
         break;
       default:
         url = '/images/moods/no-mood.png';

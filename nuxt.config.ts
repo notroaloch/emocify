@@ -1,5 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  dayjs: {
+    plugins: ['relativeTime', 'utc', 'timezone'],
+    locales: ['es-MX', 'en'],
+    defaultLocale: 'es-MX',
+    defaultTimezone: '',
+  },
   devtools: { enabled: true },
   googleFonts: {
     families: {
@@ -15,6 +21,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
     '@vueuse/nuxt',
+    'dayjs-nuxt',
   ],
   runtimeConfig: {
     public: {

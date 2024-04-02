@@ -28,29 +28,31 @@
     return await getMoods();
   });
 
+  const handleMoodSelect = async (mood: any) => {
+    await navigateTo(`/moods/${mood.id}`);
+  };
+
   watch(
     moods,
     () => {
       tableRows.value = moods.value?.map((m) => {
-        return <Mood>{
+        return {
           id: m.id,
+          shortID: getMoodShortID(m.id!),
           emotion: m.emotion,
           classifierModel: m.classifierModel,
           linkedPlaylist: m.linkedPlaylist,
-          createdAt: m.createdAt?.split('T').at(0),
+          createdAt: m.createdAt,
+          relativeCreatedAt: getFormattedDate(m.createdAt!),
         };
       });
     },
     { immediate: true }
   );
 
-  const handleMoodSelect = async (mood: any) => {
-    await navigateTo(`/moods/${mood.id}`);
-  };
-
   const tableColumns = [
     {
-      key: 'id',
+      key: 'shortID',
       label: 'ID',
       sortable: true,
     },
@@ -65,7 +67,7 @@
       sortable: true,
     },
     {
-      key: 'createdAt',
+      key: 'relativeCreatedAt',
       label: 'CREACIÓN',
       sortable: true,
     },

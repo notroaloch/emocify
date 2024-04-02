@@ -18,11 +18,13 @@
           class="group-hover:text-primary h-[15px] w-[15px]"
         />
       </div>
-      <p class="line-clamp-1 font-extralight tracking-tighter">{{ mood.id }}</p>
+      <p class="line-clamp-1 font-extralight tracking-tighter">
+        {{ getMoodShortID(mood.id!) }}
+      </p>
       <p
         class="line-clamp-1 text-sm font-extralight tracking-tight text-gray-500"
       >
-        {{ mood.createdAt }}
+        {{ getRelativeDateToNow(mood.createdAt!) }}
       </p>
     </div>
   </div>
@@ -39,17 +41,17 @@
     let url;
 
     switch (mood.value.emotion.toUpperCase()) {
-      case 'ANGRINESS':
-        url = '/images/moods/angriness.png';
+      case 'ENOJO':
+        url = '/images/moods/angry.png';
         break;
-      case 'SADNESS':
-        url = '/images/moods/sadness.png';
+      case 'TRISTEZA':
+        url = '/images/moods/sad.png';
         break;
-      case 'NEUTRALNESS':
-        url = '/images/moods/neutralness.png';
+      case 'NEUTRAL':
+        url = '/images/moods/neutral.png';
         break;
-      case 'HAPPINESS':
-        url = '/images/moods/happiness.png';
+      case 'FELICIDAD':
+        url = '/images/moods/happy.png';
         break;
       default:
         url = '/images/moods/no-mood.png';

@@ -85,9 +85,8 @@
           <!-- SCAN FACEMESH BUTTON -->
           <UIcon
             name="i-streamline-face-scan-1"
-            class="h-6 w-6 cursor-pointer transition-transform hover:scale-110"
+            class="h-6 w-6 cursor-pointer text-white transition-transform hover:scale-110"
             :class="{
-              'text-gray-500': isLoadingClassifier,
               hidden: isFaceMeshActive || results.faceLandmarks.length === 0,
             }"
             @click="handleFaceMeshScan"
@@ -190,6 +189,7 @@
   };
 
   const handleFaceMeshScan = async () => {
+    currentMood.value = undefined;
     isLoadingClassifier.value = true;
     isFaceMeshActive.value = false;
     isResultsModalOpen.value = true;
