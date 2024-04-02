@@ -1,55 +1,77 @@
 export const useSpotify = () => {
-  const headers = useRequestHeaders(['cookie']);
   const spotifyStore = useSpotifyStore();
+
   const {
     user,
-    topTracks,
-    topArtists,
-    followedArtists,
-    playlists,
+    userTopTracks,
+    userTopArtists,
+    userFollowedArtists,
+    userPlaylists,
     currentPlaylist,
   } = storeToRefs(spotifyStore);
 
-  const init = async () => {
-    if (user.value) {
-      return;
-    }
+  const getUser = async () => {
+    const data: SpotifyUser = await $fetch('/api/spotify/user', {
+      headers: useRequestHeaders(['cookie']),
+    });
 
-    await Promise.all([
-      // USER PROFILE
-      $fetch('/api/spotify/user', { headers }),
-      // TOP USER TRACKS
-      $fetch('/api/spotify/user/top-items', {
-        params: { type: 'tracks' },
-        headers,
-      }),
-      // TOP USER ARTISTS
-      $fetch('/api/spotify/user/top-items', {
-        params: { type: 'artists' },
-        headers,
-      }),
-      // USER FOLLOWED ARTISTS
-      $fetch('/api/spotify/user/followed-artists', { headers }),
-      // USER PLAYLISTS
-      $fetch('/api/spotify/user/playlists', { headers }),
-    ]).then(
-      ([_user, _topTracks, _topArtists, _followedArtists, _playlists]: any) => {
-        user.value = _user;
-        topTracks.value = _topTracks;
-        topArtists.value = _topArtists;
-        followedArtists.value = _followedArtists;
-        playlists.value = _playlists;
-      }
-    );
+    user.value = data;
+    return user.value;
+  };
+
+  const getUserTopTracks = async () => {
+    const data: Track[] = await $fetch('/api/spotify/user/top-items', {
+      headers: useRequestHeaders(['cookie']),
+      params: {
+        type: 'tracks',
+      },
+    });
+
+    userTopTracks.value = data;
+    return userTopTracks.value;
+  };
+
+  const getUserTopArtists = async () => {
+    const data: Artist[] = await $fetch('/api/spotify/user/top-items', {
+      headers: useRequestHeaders(['cookie']),
+      params: {
+        type: 'artists',
+      },
+    });
+
+    userTopArtists.value = data;
+    return userTopArtists.value;
+  };
+
+  const getUserFollowedArtists = async () => {
+    const data: Artist[] = await $fetch('/api/spotify/user/followed-artists', {
+      headers: useRequestHeaders(['cookie']),
+    });
+
+    userFollowedArtists.value = data;
+    return userFollowedArtists.value;
+  };
+
+  const getUserPlaylists = async () => {
+    const data: Playlist[] = await $fetch('/api/spotify/user/playlists', {
+      headers: useRequestHeaders(['cookie']),
+    });
+
+    userPlaylists.value = data;
+    return userPlaylists.value;
   };
 
   return {
     user,
-    topTracks,
-    topArtists,
-    followedArtists,
-    playlists,
+    userTopTracks,
+    userTopArtists,
+    userFollowedArtists,
+    userPlaylists,
     currentPlaylist,
-    init,
+    getUser,
+    getUserTopTracks,
+    getUserTopArtists,
+    getUserFollowedArtists,
+    getUserPlaylists,
   };
 };

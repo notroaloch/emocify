@@ -2,70 +2,105 @@
 <!-- TODO: ADD SHOW ALL CARD/BUTTON IN MOOD SWIPER -->
 <!-- TODO: IMPLEMENT BETTER "NO DATA" COMPONENT -->
 <template>
-  <div
-    v-if="isLoading"
-    class="flex h-screen w-screen animate-pulse items-center justify-center"
-  >
-    <p class="">Descargando datos de Spotify</p>
-  </div>
-  <div v-else class="mb-8 mt-2 flex flex-col gap-8">
+  <div class="mb-8 mt-2 flex flex-col gap-8">
+    <!-- MOODS SWIPER -->
     <UiSwiper>
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
       </template>
       <MoodCard v-for="mood in moods" :key="mood" :mood="mood" />
-      <p v-if="!moods || moods?.length === 0">No hay datos</p>
     </UiSwiper>
+
     <UDivider label="Estadísticas de Spotify" />
+
+    <!-- TOP SONGS SWIPER -->
     <UiSwiper>
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Top de Canciones</p>
       </template>
+      <SpotifyTrackPlaceholder v-if="isLoadingUserTopTracks" />
+      <UiNoDataCard
+        label="No tienes suficiente historial de escucha en Spotify para generar esta información"
+        v-else-if="!isLoadingUserTopTracks && userTopTracks?.length === 0"
+      />
       <SpotifyTrackCard
-        v-for="track in topTracks"
+        v-else
+        v-for="track in userTopTracks"
         :key="track.id"
         :track="track"
       />
-      <p v-if="!topTracks || topTracks?.length === 0">No hay datos</p>
     </UiSwiper>
+
+    <!-- TOP ARTISTS SWIPER -->
     <UiSwiper>
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Top de Artistas</p>
       </template>
+      <SpotifyArtistPlaceholder v-if="isLoadingUserTopArtists" />
+      <UiNoDataCard
+        label="No tienes suficiente historial de escucha en Spotify para generar esta información"
+        v-else-if="!isLoadingUserTopArtists && userTopArtists?.length === 0"
+      />
       <SpotifyArtistCard
-        v-for="artist in topArtists"
+        v-else
+        v-for="artist in userTopArtists"
         :key="artist.id"
         :artist="artist"
       />
-      <p v-if="!topArtists || topArtists?.length === 0">No hay datos</p>
     </UiSwiper>
+
+    <!-- FOLLOWED ARTISTS SWIPER -->
     <UiSwiper>
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Artistas Seguidos</p>
       </template>
+      <SpotifyArtistPlaceholder v-if="isLoadingUserFollowedArtists" />
+      <UiNoDataCard
+        label="No sigues a ningún artista en Spotify"
+        v-else-if="
+          !isLoadingUserFollowedArtists && userFollowedArtists?.length === 0
+        "
+      />
       <SpotifyArtistCard
-        v-for="artist in followedArtists"
+        v-else
+        v-for="artist in userFollowedArtists"
         :key="artist.id"
         :artist="artist"
       />
-      <p v-if="!followedArtists || followedArtists?.length === 0">
-        No hay datos
-      </p>
     </UiSwiper>
   </div>
 </template>
 
 <script setup lang="ts">
-  const isLoading = useState('isLoadingIndexInit', () => true);
-  const { topTracks, topArtists, followedArtists } = useSpotify();
+  const {
+    userTopTracks,
+    userTopArtists,
+    userFollowedArtists,
+    getUserTopTracks,
+    getUserTopArtists,
+    getUserFollowedArtists,
+  } = useSpotify();
 
-  const moods = useState('moods', () => [1]);
+  const moods = useState('moods', () => [1, 2, 3]);
 
-  callOnce('initSpotify', async () => {
-    const { init } = useSpotify();
-    await init();
-    isLoading.value = false;
-  });
+  const { pending: isLoadingUserTopTracks } = useAsyncData(
+    'isLoadingUserTopTracks',
+    async () => {
+      return await getUserTopTracks();
+    }
+  );
+  const { pending: isLoadingUserTopArtists } = useAsyncData(
+    'isLoadingUserTopTracks',
+    async () => {
+      return await getUserTopArtists();
+    }
+  );
+  const { pending: isLoadingUserFollowedArtists } = useAsyncData(
+    'isLoadingUserFollowedArtists',
+    async () => {
+      return await getUserFollowedArtists();
+    }
+  );
 </script>
 
 <style scoped></style>

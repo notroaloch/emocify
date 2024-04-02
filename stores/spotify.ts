@@ -1,25 +1,28 @@
-export const useSpotifyStore = defineStore('spotifyStore', () => {
-  const user: Ref<SpotifyUser | undefined> = useState('spotifyUser');
-  const topTracks: Ref<Track[] | undefined> = useState('spotifyUserTopTracks');
-  const topArtists: Ref<Artist[] | undefined> = useState(
-    'spotifyUserTopArtists'
+export const useSpotifyStore = defineStore('spotify', () => {
+  const user: Ref<SpotifyUser | undefined> = useState('spotify-user');
+  const userTopTracks: Ref<Track[] | undefined> = useState(
+    'spotify-userTopTracks'
   );
-  const followedArtists: Ref<Artist[] | undefined> = useState(
-    'spotifyUserFollowedArtists'
+  const userTopArtists: Ref<Artist[] | undefined> = useState(
+    'spotify-userTopArtists'
   );
-  const playlists: Ref<Playlist[] | undefined> = useState(
-    'spotifyUserPlaylists'
+  const userFollowedArtists: Ref<Artist[] | undefined> = useState(
+    'spotify-userFollowedArtists'
+  );
+  const userPlaylists: Ref<Playlist[] | undefined> = useState(
+    'spotify-userPlaylists'
   );
 
-  const currentPlaylist: Ref<Playlist> | undefined =
-    useState('currentPlaylist');
+  const currentPlaylist: Ref<Playlist> | undefined = useState(
+    'spotify-currentPlaylist'
+  );
 
   return {
     user,
-    topTracks,
-    topArtists,
-    followedArtists,
-    playlists,
+    userTopTracks,
+    userTopArtists,
+    userFollowedArtists,
+    userPlaylists,
     currentPlaylist,
   };
 });
