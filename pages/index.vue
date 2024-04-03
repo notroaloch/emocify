@@ -1,16 +1,28 @@
-<!-- TODO: NO DATA MOODS COMPONENT -->
-<!-- TODO: NEW MOOD IN MOOD SWIPER HEADER -->
 <template>
   <div class="mb-8 mt-2 flex flex-col gap-8">
     <!-- MOODS SWIPER -->
     <UiSwiper>
       <template v-slot:header>
-        <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
+        <div class="flex items-center gap-3">
+          <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
+          <ULink
+            to="/facescan"
+            inactive-class="text-xs text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-all"
+          >
+            Nuevo
+          </ULink>
+        </div>
       </template>
+      <!-- RENDERS LOADING AND EMPTY STATE -->
+      <MoodCardPlaceholder
+        v-if="isLoadingMoods || latestMoods!.length === 0"
+        :empty="isEmpty(latestMoods)"
+      />
+      <!-- MOOD CARD -->
       <MoodCard
-        v-if="lastFiveMoods"
-        v-for="mood in lastFiveMoods"
-        :key="mood"
+        v-else
+        v-for="mood in latestMoods"
+        :key="mood.id"
         :mood="mood"
       />
     </UiSwiper>
@@ -22,11 +34,12 @@
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Top de Canciones</p>
       </template>
-      <SpotifyTrackPlaceholder v-if="isLoadingUserTopTracks" />
-      <UiNoDataCard
-        label="No tienes suficiente historial de escucha en Spotify para generar esta información"
-        v-else-if="!isLoadingUserTopTracks && userTopTracks?.length === 0"
+      <!-- RENDERS LOADING AND EMPTY STATE -->
+      <SpotifyTrackPlaceholder
+        v-if="isLoadingTracks || userTopTracks!.length === 0"
+        :empty="isEmpty(userTopTracks)"
       />
+      <!-- TRACK CARD -->
       <SpotifyTrackCard
         v-else
         v-for="track in userTopTracks"
@@ -40,11 +53,12 @@
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Top de Artistas</p>
       </template>
-      <SpotifyArtistPlaceholder v-if="isLoadingUserTopArtists" />
-      <UiNoDataCard
-        label="No tienes suficiente historial de escucha en Spotify para generar esta información"
-        v-else-if="!isLoadingUserTopArtists && userTopArtists?.length === 0"
+      <!-- RENDERS LOADING AND EMPTY STATE -->
+      <SpotifyArtistPlaceholder
+        v-if="isLoadingArtists || userTopArtists!.length === 0"
+        :empty="isEmpty(userTopArtists)"
       />
+      <!-- ARTIST CARD -->
       <SpotifyArtistCard
         v-else
         v-for="artist in userTopArtists"
@@ -58,13 +72,12 @@
       <template v-slot:header>
         <p class="text-2xl font-bold tracking-tight">Artistas Seguidos</p>
       </template>
-      <SpotifyArtistPlaceholder v-if="isLoadingUserFollowedArtists" />
-      <UiNoDataCard
-        label="No sigues a ningún artista en Spotify"
-        v-else-if="
-          !isLoadingUserFollowedArtists && userFollowedArtists?.length === 0
-        "
+      <!-- RENDERS LOADING AND EMPTY STATE -->
+      <SpotifyArtistPlaceholder
+        v-if="isLoadingFollowedArtists || userFollowedArtists!.length === 0"
+        :empty="isEmpty(userFollowedArtists)"
       />
+      <!-- ARTIST CARD -->
       <SpotifyArtistCard
         v-else
         v-for="artist in userFollowedArtists"
@@ -86,44 +99,54 @@
   } = useSpotify();
 
   const { moods, getMoods } = useMood();
-  const lastFiveMoods = useState('lastFiveMoods');
 
-  watch(moods, () => {
-    if (!moods || moods.value?.length === 0) return;
+  const isLoadingMoods = useState('isLoadingMoods', () => true);
+  const isLoadingTracks = useState('isLoadingTracks', () => true);
+  const isLoadingArtists = useState('isLoadingArtists', () => true);
+  const isLoadingFollowedArtists = useState(
+    'isLoadingFollowedArtists',
+    () => true
+  );
 
-    if (moods.value?.length! >= 5) {
-      lastFiveMoods.value = moods.value?.slice(0, 5);
-      return;
-    }
+  // GETS THE LATEST N MOODS
+  const latestMoods = computed(() => {
+    const numberOfMoodsToShow = 4;
 
-    lastFiveMoods.value = moods.value;
+    if (!moods.value) return undefined;
+
+    if (moods.value?.length === 0) return [];
+
+    if (moods.value.length >= numberOfMoodsToShow)
+      return moods.value.slice(0, numberOfMoodsToShow);
+
+    return moods.value;
   });
 
-  const { pending: isLoadingMoods } = useAsyncData(
-    'isLoadingMoods',
-    async () => {
-      return await getMoods();
-    }
-  );
+  const setLoadingStates = (state: boolean) => {
+    isLoadingMoods.value = state;
+    isLoadingTracks.value = state;
+    isLoadingArtists.value = state;
+    isLoadingFollowedArtists.value = state;
+  };
 
-  const { pending: isLoadingUserTopTracks } = useAsyncData(
-    'isLoadingUserTopTracks',
-    async () => {
-      return await getUserTopTracks();
+  // FETCH INITIAL DATA
+  callOnce('/index - Initial Fetch', async () => {
+    if (
+      !moods.value ||
+      !userTopTracks.value ||
+      !userTopArtists.value ||
+      !userFollowedArtists.value
+    ) {
+      setLoadingStates(true);
+      await Promise.all([
+        getMoods(),
+        getUserTopTracks(),
+        getUserTopArtists(),
+        getUserFollowedArtists(),
+      ]);
+      setLoadingStates(false);
     }
-  );
-  const { pending: isLoadingUserTopArtists } = useAsyncData(
-    'isLoadingUserTopTracks',
-    async () => {
-      return await getUserTopArtists();
-    }
-  );
-  const { pending: isLoadingUserFollowedArtists } = useAsyncData(
-    'isLoadingUserFollowedArtists',
-    async () => {
-      return await getUserFollowedArtists();
-    }
-  );
+  });
 </script>
 
 <style scoped></style>
