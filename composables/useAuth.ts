@@ -39,6 +39,10 @@ export const useAuth = () => {
         scopes: runtimeConfig.public.spotifyScopes,
       },
     });
+
+    if (!error) {
+      return true;
+    }
   };
 
   const signOut = async () => {

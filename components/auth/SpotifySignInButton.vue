@@ -4,14 +4,21 @@
     icon="i-logos-spotify-icon"
     size="xl"
     color="black"
-    variant="outline"
+    variant="solid"
     label="Iniciar Sesión con Spotify"
-    @click="signInWithSpotify"
+    :disabled="isLoading"
+    @click="handleClick"
   />
 </template>
 
 <script setup lang="ts">
   const { signInWithSpotify } = useAuth();
+  const isLoading = useState('signInButtonLoading', () => false);
+
+  const handleClick = async () => {
+    isLoading.value = true;
+    const result = await signInWithSpotify();
+  };
 </script>
 
 <style scoped></style>
