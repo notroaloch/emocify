@@ -3,8 +3,8 @@
     class="w-fit"
     icon="i-logos-spotify-icon"
     size="xl"
-    color="black"
-    variant="solid"
+    color="primary"
+    variant="link"
     label="Iniciar Sesión con Spotify"
     :disabled="isLoading"
     @click="handleClick"
@@ -17,7 +17,7 @@
 
   const handleClick = async () => {
     isLoading.value = true;
-    const result = await signInWithSpotify();
+    await signInWithSpotify();
   };
 </script>
 

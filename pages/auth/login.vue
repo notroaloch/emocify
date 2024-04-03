@@ -2,7 +2,7 @@
   <div
     class="flex h-[calc(100vh-60px)] flex-col items-center justify-center gap-20"
   >
-    <div class="flex flex-col gap-12">
+    <div class="flex flex-col items-center gap-12">
       <AuthHero />
       <AuthSpotifySignInButton />
     </div>
