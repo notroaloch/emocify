@@ -44,7 +44,7 @@ export const useMood = () => {
     });
 
     // INSERT NEW MOOD IN STATE
-    moods.value?.push(mood);
+    moods.value?.unshift(mood);
     currentMood.value = mood;
 
     return currentMood.value;
