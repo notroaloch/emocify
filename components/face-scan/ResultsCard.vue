@@ -101,12 +101,11 @@
 
   const handleClick = async () => {
     isLoading.value = true;
+
+    const playlist = await createNewPlaylist(currentMood.value!);
+    currentMood.value!.linkedPlaylist = playlist.id;
+
     didCreatePlaylist.value = true;
-    await createNewPlaylist(currentMood.value!);
-
-    // TODO: INSERT PLAYLIST IN DB
-    // TODO: UPDATE MOOD LINKED PLAYLIST AND MOODS
-
     isLoading.value = false;
   };
 

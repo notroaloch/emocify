@@ -1,4 +1,4 @@
-import { serverSupabaseUser } from '#supabase/server';
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server';
 import {
   addTracksToPlaylist,
   classifyAudioFeaturesByEmotion,
@@ -10,6 +10,7 @@ import {
 
 export default defineEventHandler(async (event) => {
   const authToken = getCookie(event, 'oauth_provider_token');
+  const supabase = await serverSupabaseClient<Database>(event);
   const supaUser = await serverSupabaseUser(event);
   const spotifyUserID = supaUser?.identities?.at(0)?.id;
 
@@ -104,5 +105,21 @@ export default defineEventHandler(async (event) => {
 
   // GET FULL PLAYLIST DATA
   const playlist: Playlist = await getPlaylist(authToken, playlistID);
+
+  const p = {
+    id: playlist.id,
+    url: playlist.href,
+    moodID: mood.id,
+  };
+
+  // INSERT PLAYLIST IN DB
+  const { error: inserError } = await supabase.from('playlists').insert(p);
+  // UPDATE MOOD WITH LINKED PLAYLIST
+  const { data: updatedMood, error: updateError } = await supabase
+    .from('moods')
+    .update({ linkedPlaylist: playlist.id })
+    .eq('id', mood.id!)
+    .select();
+
   return playlist;
 });

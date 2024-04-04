@@ -73,6 +73,7 @@ export const useSpotify = () => {
 
     userPlaylists.value?.push(data);
     currentPlaylist.value = data;
+
     return currentPlaylist.value;
   };
 
