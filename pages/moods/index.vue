@@ -3,9 +3,7 @@
   <div class="mb-8 mt-2">
     <p class="text-2xl font-bold tracking-tight">Moods</p>
     <div class="mt-6">
-      <UiNoDataCard label="No hay moods" v-if="!moods || moods.length === 0" />
       <UTable
-        v-else
         :loading="isLoading"
         :loading-state="{
           icon: 'i-heroicons-arrow-path-20-solid',

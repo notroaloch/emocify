@@ -41,16 +41,16 @@
     let url;
 
     switch (mood.value.emotion.toUpperCase()) {
-      case 'ENOJO':
+      case 'ANGRY':
         url = '/images/moods/angry.png';
         break;
-      case 'TRISTEZA':
+      case 'SAD':
         url = '/images/moods/sad.png';
         break;
       case 'NEUTRAL':
         url = '/images/moods/neutral.png';
         break;
-      case 'FELICIDAD':
+      case 'HAPPY':
         url = '/images/moods/happy.png';
         break;
       default:

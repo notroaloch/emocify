@@ -8,6 +8,5 @@ export const spotifyAPI = {
     getCurrentUserFollowedArtists: '/me/following',
     getSeveralTracksAudioFeatures: '/audio-features',
     getRecommendations: '/recommendations',
-    getArtistTopTracks: '/artists', // artists/id/top-tracks
   },
 };

@@ -4,8 +4,8 @@
   >
     <template #header>
       <div class="flex items-center">
-        <p class="flex-1 text-2xl font-bold tracking-tight">
-          Resultados del Escaneo
+        <p class="flex-1 text-xl tracking-tight">
+          {{ currentMood ? 'Resultados' : '' }}
         </p>
         <UButton
           color="gray"
@@ -64,30 +64,55 @@
         </div>
       </div>
     </div>
-    <div v-else class="animate-pulse text-center">Procesando FaceMesh</div>
-    <template #footer>
-      <UButton block color="primary" variant="soft">Generar Playlist</UButton>
+    <div v-else class="flex flex-col items-center gap-6">
+      <UIcon
+        name="i-streamline-face-scan-1"
+        class="text-primary h-[40px] w-[40px]"
+      />
+      <p class="animate-pulse text-center">Procesando FaceMesh</p>
+    </div>
+    <template #footer v-if="currentMood">
+      <UButton
+        block
+        color="primary"
+        variant="soft"
+        :class="{ hidden: hasGeneratedPlaylist }"
+        :disabled="isLoading"
+        @click="handleClick"
+        >Generar Playlist</UButton
+      >
     </template>
   </UCard>
 </template>
 
 <script setup lang="ts">
   const { currentMood } = useMood();
+  const { createNewPlaylist } = useSpotify();
+
+  const isLoading = useState('isLoading', () => false);
+  const hasGeneratedPlaylist = useState('hasGeneratedPlaylist', () => false);
+
+  const handleClick = async () => {
+    isLoading.value = true;
+    await createNewPlaylist(currentMood.value!);
+    hasGeneratedPlaylist.value = true;
+    isLoading.value = false;
+  };
 
   const imageURL = computed(() => {
     let url;
 
     switch (currentMood.value!.emotion.toUpperCase()) {
-      case 'ENOJO':
+      case 'ANGRY':
         url = '/images/moods/angry.png';
         break;
-      case 'TRISTEZA':
+      case 'SAD':
         url = '/images/moods/sad.png';
         break;
       case 'NEUTRAL':
         url = '/images/moods/neutral.png';
         break;
-      case 'FELICIDAD':
+      case 'HAPPY':
         url = '/images/moods/happy.png';
         break;
       default:

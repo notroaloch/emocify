@@ -3,7 +3,7 @@
 export default defineEventHandler(async (event) => {
   const { faceMesh } = await readBody(event);
 
-  const emotions = ['ENOJO', 'TRISTEZA', 'NEUTRAL', 'FELICIDAD'];
+  const emotions = ['ANGRY', 'SAD', 'NEUTRAL', 'HAPPY'];
   const emotion = emotions[Math.floor(Math.random() * emotions.length)];
 
   return { emotion, model: 'SVM' };

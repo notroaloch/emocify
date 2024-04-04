@@ -61,6 +61,21 @@ export const useSpotify = () => {
     return userPlaylists.value;
   };
 
+  const createNewPlaylist = async (mood: Mood) => {
+    const data: Playlist = await $fetch('/api/spotify/user/playlists', {
+      method: 'POST',
+      headers: useRequestHeaders(['cookie']),
+      body: {
+        mood,
+        artists: [userTopArtists.value, userFollowedArtists.value],
+      },
+    });
+
+    userPlaylists.value?.push(data);
+    currentPlaylist.value = data;
+    return currentPlaylist.value;
+  };
+
   return {
     user,
     userTopTracks,
@@ -73,5 +88,6 @@ export const useSpotify = () => {
     getUserTopArtists,
     getUserFollowedArtists,
     getUserPlaylists,
+    createNewPlaylist,
   };
 };

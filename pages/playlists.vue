@@ -1,12 +1,7 @@
 <template>
   <div class="mb-8 mt-2">
     <p class="text-2xl font-bold tracking-tight">Playlists</p>
-    <UiNoDataCard
-      class="mt-4"
-      label="No tienes ninguna playlist en Spotify"
-      v-if="!userPlaylists || userPlaylists.length === 0"
-    />
-    <div v-else>
+    <div>
       <div class="mt-6 flex flex-col gap-4 lg:grid lg:grid-cols-4">
         <USelectMenu
           class="lg:hidden"
