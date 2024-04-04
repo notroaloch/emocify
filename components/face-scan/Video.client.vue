@@ -97,7 +97,7 @@
       <UModal v-model="isResultsModalOpen" prevent-close>
         <FaceScanResultsCard
           v-model="isResultsModalOpen"
-          @close-modal="handleModalClose"
+          @on-modal-close="handleModalClose"
         />
       </UModal>
     </div>

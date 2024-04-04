@@ -12,7 +12,7 @@
           variant="ghost"
           icon="i-heroicons-x-mark-20-solid"
           class="-my-1"
-          @click="$emit('closeModal')"
+          @click="handleModalClose"
         />
       </div>
     </template>
@@ -51,9 +51,7 @@
             PLAYLIST VINCULADA
           </p>
           <p class="text-xs text-gray-500">
-            {{
-              currentMood?.linkedPlaylist ? currentMood?.linkedPlaylist : 'NO'
-            }}
+            {{ currentMood.linkedPlaylist ? currentMood.linkedPlaylist : 'NO' }}
           </p>
         </div>
         <div>
@@ -76,27 +74,45 @@
         block
         color="primary"
         variant="soft"
-        :class="{ hidden: hasGeneratedPlaylist }"
+        :class="{ hidden: didCreatePlaylist }"
         :disabled="isLoading"
         @click="handleClick"
         >Generar Playlist</UButton
       >
+      <UAlert
+        v-if="didCreatePlaylist"
+        title="¡Creación exitosa!"
+        description="Se vinculó la playlist generada con el mood actual"
+        color="green"
+        variant="subtle"
+      />
     </template>
   </UCard>
 </template>
 
 <script setup lang="ts">
+  const emit = defineEmits(['onModalClose']);
+
   const { currentMood } = useMood();
   const { createNewPlaylist } = useSpotify();
 
-  const isLoading = useState('isLoading', () => false);
-  const hasGeneratedPlaylist = useState('hasGeneratedPlaylist', () => false);
+  const isLoading: Ref<boolean> = useState('isLoading', () => false);
+  const didCreatePlaylist: Ref<boolean> = useState('didCreatePlaylist');
 
   const handleClick = async () => {
     isLoading.value = true;
+    didCreatePlaylist.value = true;
     await createNewPlaylist(currentMood.value!);
-    hasGeneratedPlaylist.value = true;
+
+    // TODO: INSERT PLAYLIST IN DB
+    // TODO: UPDATE MOOD LINKED PLAYLIST AND MOODS
+
     isLoading.value = false;
+  };
+
+  const handleModalClose = () => {
+    didCreatePlaylist.value = false;
+    emit('onModalClose');
   };
 
   const imageURL = computed(() => {
