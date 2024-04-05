@@ -7,7 +7,7 @@ export const getRelativeDateToNow = (date: string) => {
 
 export const getFormattedDate = (date: string) => {
   const dayjs = useDayjs();
-  const formattedDate = dayjs(date).format('DD/MM/YYYY - HH:mm:ss');
+  const formattedDate = dayjs(date).format('DD/MM/YY - HH:mm');
   return formattedDate;
 };
 

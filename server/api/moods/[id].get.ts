@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await supabase
     .from('moods')
     .select('*')
-    .eq('userID', user.id)
     .eq('id', moodID);
 
   if (error) {

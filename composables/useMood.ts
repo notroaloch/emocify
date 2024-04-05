@@ -14,6 +14,25 @@ export const useMood = () => {
     return data;
   };
 
+  const deleteMood = async (id: string) => {
+    const ok = await $fetch(`/api/moods/${id}`, {
+      method: 'DELETE',
+      headers: useRequestHeaders(['cookie']),
+    });
+
+    if (ok) {
+      const updatedMoods: Mood[] = [];
+      moods.value?.forEach((mood) => {
+        if (mood.id !== id) {
+          updatedMoods.push(mood);
+        }
+      });
+      moods.value = updatedMoods;
+    }
+
+    return true;
+  };
+
   const getMoods = async () => {
     const data: Mood[] = await $fetch('/api/moods', {
       method: 'GET',
@@ -22,6 +41,28 @@ export const useMood = () => {
 
     moods.value = data;
     return data;
+  };
+
+  const deleteMoods = async (ids: string[]) => {
+    const ok = await $fetch('/api/moods', {
+      method: 'DELETE',
+      headers: useRequestHeaders(['cookie']),
+      query: {
+        ids,
+      },
+    });
+
+    if (ok) {
+      const updatedMoods: Mood[] = [];
+      moods.value?.forEach((mood) => {
+        if (!ids.includes(mood.id!)) {
+          updatedMoods.push(mood);
+        }
+      });
+      moods.value = updatedMoods;
+    }
+
+    return true;
   };
 
   const newMoodFromFaceMesh = async (faceMesh: FaceLandmarkerResult) => {
@@ -65,6 +106,8 @@ export const useMood = () => {
     currentMood,
     getMood,
     getMoods,
+    deleteMood,
+    deleteMoods,
     newMoodFromFaceMesh,
   };
 };

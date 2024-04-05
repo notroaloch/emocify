@@ -2,7 +2,7 @@
   <div class="mb-24 mt-2">
     <p class="text-2xl font-bold tracking-tight">Playlists</p>
     <div>
-      <div class="mt-6 flex flex-col gap-4 lg:grid lg:grid-cols-4">
+      <div class="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-4">
         <USelectMenu
           class="lg:hidden"
           :disabled="isLoading"

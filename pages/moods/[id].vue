@@ -1,18 +1,27 @@
 <template>
   <div class="mb-24 mt-2">
-    <p class="text-2xl font-bold tracking-tight">Detalles de Mood</p>
-    <p>{{ currentMood }}</p>
+    <div class="flex items-center gap-2">
+      <UButton
+        icon="i-material-symbols-arrow-back-ios-new-rounded"
+        color="white"
+        class="transition-transform hover:scale-125"
+        variant="link"
+        to="/moods"
+      />
+      <p class="text-2xl font-bold tracking-tight">Detalles de Mood</p>
+    </div>
+    <div class="mt-4">
+      <p>{{ currentMood }}</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
   const route = useRoute();
-  const moodID = route.params.id;
+  const id = route.params.id;
 
   const { currentMood, getMood } = useMood();
-  const { pending: isLoading } = useAsyncData('mood/id/getMood', async () => {
-    return await getMood(moodID as string);
-  });
+  await getMood(id as string);
 </script>
 
 <style scoped></style>

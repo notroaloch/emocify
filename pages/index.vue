@@ -100,12 +100,12 @@
 
   const { moods, getMoods } = useMood();
 
-  const isLoadingMoods = useState('index-isLoadingMoods', () => true);
-  const isLoadingTracks = useState('index-isLoadingTracks', () => true);
-  const isLoadingArtists = useState('index-isLoadingArtists', () => true);
+  const isLoadingMoods = useState('index-isLoadingMoods', () => false);
+  const isLoadingTracks = useState('index-isLoadingTracks', () => false);
+  const isLoadingArtists = useState('index-isLoadingArtists', () => false);
   const isLoadingFollowedArtists = useState(
     'index-isLoadingFollowedArtists',
-    () => true
+    () => false
   );
 
   // GETS THE LATEST N MOODS
@@ -121,17 +121,16 @@
 
   // FETCH INITIAL DATA
   callOnce('index-callOnce', async () => {
+    isLoadingMoods.value = true;
+    isLoadingTracks.value = true;
+    isLoadingArtists.value = true;
+    isLoadingFollowedArtists.value = true;
     if (
       !moods.value ||
       !userTopTracks.value ||
       !userTopArtists.value ||
       !userFollowedArtists.value
     ) {
-      isLoadingMoods.value = true;
-      isLoadingTracks.value = true;
-      isLoadingArtists.value = true;
-      isLoadingFollowedArtists.value = true;
-
       await Promise.all([
         getMoods(),
         getUserTopTracks(),
