@@ -1,21 +1,21 @@
-import { spotifyAPI } from '~/server/utils/api';
-
 export default defineEventHandler(async (event) => {
-  const authToken = getCookie(event, 'oauth_provider_token');
-
   const {
     type,
-    timeRange,
+    timeRange = 'long_term',
     limit,
     offset,
-  }: { type: string; timeRange: string; limit: number; offset: number } =
-    getQuery(event);
+  }: {
+    type: string;
+    timeRange: string;
+    limit: number;
+    offset: number;
+  } = getQuery(event);
+  const authToken = getCookie(event, 'oauth_provider_token');
 
   if (!authToken) {
     throw createError({
-      statusCode: 400,
-      statusMessage:
-        '[E400-MC] - Missing cookie: oauth_provider_token (spotify auth token)',
+      statusCode: 401,
+      statusMessage: '[E401-MC] - Missing cookie: oauth_provider_token',
     });
   }
 
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       statusMessage:
-        '[E400-MQP] - Missing query param: type (tracks | artists)',
+        '[E400-MQP] - Missing query param: type [tracks | artists]',
     });
   } else if (type !== 'tracks' && type !== 'artists') {
     throw createError({
@@ -33,14 +33,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const data: any = await $fetch(
+  const { items }: UserTopItemsResponse = await $fetch(
     spotifyAPI.endpoints.getCurrentUserTopItems + `/${type}`,
     {
       baseURL: spotifyAPI.baseURL,
       headers: {
         Authorization: 'Bearer ' + authToken,
       },
-      params: {
+      query: {
         timeRange,
         limit,
         offset,
@@ -48,5 +48,5 @@ export default defineEventHandler(async (event) => {
     }
   );
 
-  return data.items;
+  return items;
 });

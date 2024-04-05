@@ -49,7 +49,7 @@
         <ul class="flex flex-col gap-2">
           <li v-for="link in links" :key="link.id">
             <p
-              class="hover:text-primary cursor-pointer text-sm"
+              class="hover:text-primary cursor-pointer text-sm text-gray-800 dark:text-gray-300"
               @click="handleClick(link.href)"
             >
               {{ link.id }}. {{ link.label }}

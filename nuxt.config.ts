@@ -2,9 +2,8 @@
 export default defineNuxtConfig({
   dayjs: {
     plugins: ['relativeTime', 'utc', 'timezone'],
-    locales: ['es', 'en'],
+    locales: ['es'],
     defaultLocale: 'es',
-    defaultTimezone: '',
   },
   devtools: { enabled: true },
   googleFonts: {

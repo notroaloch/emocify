@@ -45,6 +45,38 @@ export type Database = {
         };
         Relationships: [];
       };
+      playlists: {
+        Row: {
+          createdAt: string;
+          id: string;
+          moodID: string;
+          url: string;
+          userID: string;
+        };
+        Insert: {
+          createdAt?: string;
+          id: string;
+          moodID: string;
+          url: string;
+          userID?: string;
+        };
+        Update: {
+          createdAt?: string;
+          id?: string;
+          moodID?: string;
+          url?: string;
+          userID?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'public_playlists_moodID_fkey';
+            columns: ['moodID'];
+            isOneToOne: false;
+            referencedRelation: 'moods';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;

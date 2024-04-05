@@ -1,6 +1,6 @@
 <!-- TODO: BETTER NO DATA AND CREATE NEW MOOD LINK -->
 <template>
-  <div class="mb-8 mt-2">
+  <div class="mb-24 mt-2">
     <p class="text-2xl font-bold tracking-tight">Moods</p>
     <div class="mt-6">
       <UTable
@@ -75,6 +75,13 @@
       sortable: true,
     },
   ];
+
+  // FETCH INITIAL DATA
+  callOnce('index-callOnce', async () => {
+    if (!moods.value) {
+      await getMoods();
+    }
+  });
 </script>
 
 <style scoped></style>

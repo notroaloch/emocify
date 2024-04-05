@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8 mt-2 flex flex-col gap-8">
+  <div class="mb-24 mt-2 flex flex-col gap-8">
     <!-- MOODS SWIPER -->
     <UiSwiper>
       <template v-slot:header>
@@ -16,7 +16,7 @@
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <MoodCardPlaceholder
         v-if="isLoadingMoods || latestMoods!.length === 0"
-        :empty="isEmpty(latestMoods)"
+        :empty="isArrayEmpty(latestMoods)"
       />
       <!-- MOOD CARD -->
       <MoodCard
@@ -37,7 +37,7 @@
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <SpotifyTrackPlaceholder
         v-if="isLoadingTracks || userTopTracks!.length === 0"
-        :empty="isEmpty(userTopTracks)"
+        :empty="isArrayEmpty(userTopTracks)"
       />
       <!-- TRACK CARD -->
       <SpotifyTrackCard
@@ -56,7 +56,7 @@
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <SpotifyArtistPlaceholder
         v-if="isLoadingArtists || userTopArtists!.length === 0"
-        :empty="isEmpty(userTopArtists)"
+        :empty="isArrayEmpty(userTopArtists)"
       />
       <!-- ARTIST CARD -->
       <SpotifyArtistCard
@@ -75,7 +75,7 @@
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <SpotifyArtistPlaceholder
         v-if="isLoadingFollowedArtists || userFollowedArtists!.length === 0"
-        :empty="isEmpty(userFollowedArtists)"
+        :empty="isArrayEmpty(userFollowedArtists)"
       />
       <!-- ARTIST CARD -->
       <SpotifyArtistCard
@@ -100,51 +100,49 @@
 
   const { moods, getMoods } = useMood();
 
-  const isLoadingMoods = useState('isLoadingMoods', () => true);
-  const isLoadingTracks = useState('isLoadingTracks', () => true);
-  const isLoadingArtists = useState('isLoadingArtists', () => true);
+  const isLoadingMoods = useState('index-isLoadingMoods', () => true);
+  const isLoadingTracks = useState('index-isLoadingTracks', () => true);
+  const isLoadingArtists = useState('index-isLoadingArtists', () => true);
   const isLoadingFollowedArtists = useState(
-    'isLoadingFollowedArtists',
+    'index-isLoadingFollowedArtists',
     () => true
   );
 
   // GETS THE LATEST N MOODS
   const latestMoods = computed(() => {
     const numberOfMoodsToShow = 4;
-
     if (!moods.value) return undefined;
-
     if (moods.value?.length === 0) return [];
-
     if (moods.value.length >= numberOfMoodsToShow)
       return moods.value.slice(0, numberOfMoodsToShow);
 
     return moods.value;
   });
 
-  const setLoadingStates = (state: boolean) => {
-    isLoadingMoods.value = state;
-    isLoadingTracks.value = state;
-    isLoadingArtists.value = state;
-    isLoadingFollowedArtists.value = state;
-  };
-
   // FETCH INITIAL DATA
-  callOnce('/index - Initial Fetch', async () => {
+  callOnce('index-callOnce', async () => {
     if (
       !moods.value ||
       !userTopTracks.value ||
       !userTopArtists.value ||
       !userFollowedArtists.value
     ) {
-      setLoadingStates(true);
+      isLoadingMoods.value = true;
+      isLoadingTracks.value = true;
+      isLoadingArtists.value = true;
+      isLoadingFollowedArtists.value = true;
+
       await Promise.all([
         getMoods(),
         getUserTopTracks(),
         getUserTopArtists(),
         getUserFollowedArtists(),
       ]);
-      setLoadingStates(false);
+
+      isLoadingMoods.value = false;
+      isLoadingTracks.value = false;
+      isLoadingArtists.value = false;
+      isLoadingFollowedArtists.value = false;
     }
   });
 </script>

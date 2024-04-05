@@ -1,6 +1,5 @@
 export const useSpotify = () => {
   const spotifyStore = useSpotifyStore();
-
   const {
     user,
     userTopTracks,
@@ -10,46 +9,47 @@ export const useSpotify = () => {
     currentPlaylist,
   } = storeToRefs(spotifyStore);
 
+  const { currentMood } = useMood();
+
   const getUser = async () => {
     const data: SpotifyUser = await $fetch('/api/spotify/user', {
       headers: useRequestHeaders(['cookie']),
     });
 
     user.value = data;
-    return user.value;
+    return data;
   };
 
   const getUserTopTracks = async () => {
     const data: Track[] = await $fetch('/api/spotify/user/top-items', {
       headers: useRequestHeaders(['cookie']),
-      params: {
+      query: {
         type: 'tracks',
       },
     });
 
     userTopTracks.value = data;
-    return userTopTracks.value;
+    return data;
   };
 
   const getUserTopArtists = async () => {
     const data: Artist[] = await $fetch('/api/spotify/user/top-items', {
       headers: useRequestHeaders(['cookie']),
-      params: {
+      query: {
         type: 'artists',
       },
     });
 
     userTopArtists.value = data;
-    return userTopArtists.value;
+    return data;
   };
 
   const getUserFollowedArtists = async () => {
     const data: Artist[] = await $fetch('/api/spotify/user/followed-artists', {
       headers: useRequestHeaders(['cookie']),
     });
-
     userFollowedArtists.value = data;
-    return userFollowedArtists.value;
+    return data;
   };
 
   const getUserPlaylists = async () => {
@@ -58,23 +58,36 @@ export const useSpotify = () => {
     });
 
     userPlaylists.value = data;
-    return userPlaylists.value;
+    return data;
   };
 
-  const createNewPlaylist = async (mood: Mood) => {
-    const data: Playlist = await $fetch('/api/spotify/user/playlists', {
-      method: 'POST',
-      headers: useRequestHeaders(['cookie']),
-      body: {
-        mood,
-        artists: [userTopArtists.value, userFollowedArtists.value],
-      },
-    });
+  const createMoodedPlaylist = async (mood: Mood) => {
+    const name = generatePlaylistName(mood);
+    const description = generatePlaylistDescription();
+    const artists = getArtistsAsUniqueArray(
+      userTopArtists.value!,
+      userFollowedArtists.value!
+    );
 
-    userPlaylists.value?.push(data);
-    currentPlaylist.value = data;
+    const data: { mood: Mood; playlist: Playlist } = await $fetch(
+      '/api/spotify/user/mooded-playlist',
+      {
+        method: 'POST',
+        headers: useRequestHeaders(['cookie']),
+        body: {
+          name,
+          description,
+          artists,
+          mood,
+        },
+      }
+    );
 
-    return currentPlaylist.value;
+    userPlaylists.value?.unshift(data.playlist);
+    currentPlaylist.value = data.playlist;
+    currentMood.value = data.mood;
+
+    return data;
   };
 
   return {
@@ -89,6 +102,6 @@ export const useSpotify = () => {
     getUserTopArtists,
     getUserFollowedArtists,
     getUserPlaylists,
-    createNewPlaylist,
+    createMoodedPlaylist,
   };
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8 mt-2">
+  <div class="mb-24 mt-2">
     <p class="text-2xl font-bold tracking-tight">FaceScan</p>
     <div class="mt-4 flex flex-col gap-8">
       <!-- VIDEO SELECTOR -->

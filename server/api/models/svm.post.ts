@@ -1,5 +1,4 @@
 // TODO: MAKE REAL REQUEST TO PYTHON SERVER
-
 export default defineEventHandler(async (event) => {
   const { faceMesh } = await readBody(event);
 

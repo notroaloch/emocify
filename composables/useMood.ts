@@ -11,17 +11,17 @@ export const useMood = () => {
     });
 
     currentMood.value = data;
-    return currentMood.value;
+    return data;
   };
 
   const getMoods = async () => {
-    const data = await $fetch('/api/moods', {
+    const data: Mood[] = await $fetch('/api/moods', {
       method: 'GET',
       headers: useRequestHeaders(['cookie']),
     });
 
     moods.value = data;
-    return moods.value;
+    return data;
   };
 
   const newMoodFromFaceMesh = async (faceMesh: FaceLandmarkerResult) => {
@@ -33,21 +33,31 @@ export const useMood = () => {
       },
     });
 
+    const faceLandmarks = faceMesh.faceLandmarks.at(0);
+    const faceBlendshapes = faceMesh.faceBlendshapes.at(0)?.categories;
+    const faceMatrix = faceMesh.facialTransformationMatrixes.at(0)?.data;
+
+    const mood = <Mood>{
+      emotion,
+      classifierModel: model,
+      faceLandmarks,
+      faceBlendshapes,
+      faceMatrix,
+    };
+
     // CALL ENDPOINT TO MAKE A NEW MOOD IN DATABASE
-    const mood: Mood = await $fetch('/api/moods', {
+    const data: Mood = await $fetch('/api/moods', {
       method: 'POST',
       body: {
-        emotion,
-        model,
-        faceMesh,
+        mood,
       },
     });
 
     // INSERT NEW MOOD IN STATE
-    moods.value?.unshift(mood);
-    currentMood.value = mood;
+    moods.value?.unshift(data);
+    currentMood.value = data;
 
-    return currentMood.value;
+    return data;
   };
 
   return {

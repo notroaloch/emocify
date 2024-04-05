@@ -1,30 +1,17 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server';
-import type { FaceLandmarkerResult } from '@mediapipe/tasks-vision';
-import type { Database } from '~/utils/database.types';
+import { serverSupabaseClient } from '#supabase/server';
 
 export default defineEventHandler(async (event) => {
-  const {
-    emotion,
-    model,
-    faceMesh,
-  }: { emotion: string; model: string; faceMesh: FaceLandmarkerResult } =
-    await readBody(event);
+  const { mood }: { mood: Mood } = await readBody(event);
 
-  const faceLandmarks = faceMesh.faceLandmarks.at(0);
-  const faceBlendshapes = faceMesh.faceBlendshapes.at(0)?.categories;
-  const faceMatrix = faceMesh.facialTransformationMatrixes.at(0)?.data;
+  if (!mood) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: '[E400-MB] - Missing body: mood',
+    });
+  }
 
   const supabase = await serverSupabaseClient<Database>(event);
-
-  const m = {
-    emotion,
-    classifierModel: model,
-    faceLandmarks: faceLandmarks as Array<FaceLandmark>,
-    faceBlendshapes: faceBlendshapes as Array<FaceBlendshape>,
-    faceMatrix: faceMatrix as Array<number>,
-  };
-
-  const { data, error } = await supabase.from('moods').insert(m).select();
+  const { data, error } = await supabase.from('moods').insert(mood).select();
 
   if (error) {
     throw createError({
@@ -32,6 +19,11 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const mood = data?.at(0);
-  return mood;
+  const insertedMood = data
+    .map((mood) => {
+      return <Mood>{ ...mood };
+    })
+    .at(0);
+
+  return insertedMood;
 });

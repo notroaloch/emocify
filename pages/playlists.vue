@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8 mt-2">
+  <div class="mb-24 mt-2">
     <p class="text-2xl font-bold tracking-tight">Playlists</p>
     <div>
       <div class="mt-6 flex flex-col gap-4 lg:grid lg:grid-cols-4">
@@ -18,7 +18,7 @@
         <iframe
           allow="encrypted-media"
           v-show="currentPlaylist"
-          class="min-h-[600px] w-full rounded-xl lg:col-span-3"
+          class="h-[calc(100vh-180px)] w-full rounded-xl lg:col-span-3"
           :src="iFrameURL"
           frameborder="0"
         />
@@ -53,8 +53,11 @@
       return;
     }
 
-    playlistNavigationItems.value = userPlaylists.value?.map((playlist) => {
-      return {
+    const normalPlaylists: any[] = [];
+    const emocifyPlaylists: any[] = [];
+
+    userPlaylists.value.forEach((playlist) => {
+      const p = {
         label: playlist.name,
         labelClass:
           currentPlaylist.value.id === playlist.id
@@ -64,8 +67,28 @@
           currentPlaylist.value = playlist;
         },
       };
+
+      if (playlist.name.toUpperCase().includes('EMOCIFY')) {
+        emocifyPlaylists.push(p);
+        return;
+      }
+
+      normalPlaylists.push(p);
     });
+
+    if (emocifyPlaylists.length > 0) {
+      playlistNavigationItems.value = [emocifyPlaylists, normalPlaylists];
+    } else {
+      playlistNavigationItems.value = normalPlaylists;
+    }
+
     currentPlaylist.value = currentPlaylist.value;
+  });
+
+  callOnce('index-callOnce', async () => {
+    if (!userPlaylists.value) {
+      await getUserPlaylists();
+    }
   });
 </script>
 

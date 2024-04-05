@@ -94,7 +94,7 @@
   const emit = defineEmits(['onModalClose']);
 
   const { currentMood } = useMood();
-  const { createNewPlaylist } = useSpotify();
+  const { createMoodedPlaylist } = useSpotify();
 
   const isLoading: Ref<boolean> = useState('isLoading', () => false);
   const didCreatePlaylist: Ref<boolean> = useState('didCreatePlaylist');
@@ -102,8 +102,7 @@
   const handleClick = async () => {
     isLoading.value = true;
 
-    const playlist = await createNewPlaylist(currentMood.value!);
-    currentMood.value!.linkedPlaylist = playlist.id;
+    await createMoodedPlaylist(currentMood.value!);
 
     didCreatePlaylist.value = true;
     isLoading.value = false;

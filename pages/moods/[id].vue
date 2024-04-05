@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8 mt-2">
+  <div class="mb-24 mt-2">
     <p class="text-2xl font-bold tracking-tight">Detalles de Mood</p>
     <p>{{ currentMood }}</p>
   </div>

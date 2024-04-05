@@ -1,30 +1,27 @@
-import { spotifyAPI } from '~/server/utils/api';
-
 export default defineEventHandler(async (event) => {
-  const authToken = getCookie(event, 'oauth_provider_token');
   const { limit }: { limit: number } = getQuery(event);
+  const authToken = getCookie(event, 'oauth_provider_token');
 
   if (!authToken) {
     throw createError({
-      statusCode: 400,
-      statusMessage:
-        '[E400-MC] - Missing cookie: oauth_provider_token (spotify auth token)',
+      statusCode: 401,
+      statusMessage: '[E401-MC] - Missing cookie: oauth_provider_token',
     });
   }
 
-  const data: any = await $fetch(
+  const { artists }: FollowedArtistsResponse = await $fetch(
     spotifyAPI.endpoints.getCurrentUserFollowedArtists,
     {
       baseURL: spotifyAPI.baseURL,
       headers: {
         Authorization: 'Bearer ' + authToken,
       },
-      params: {
+      query: {
         type: 'artist',
         limit,
       },
     }
   );
 
-  return data.artists.items;
+  return artists.items;
 });
