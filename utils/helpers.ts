@@ -16,6 +16,30 @@ export const getMoodShortID = (id: string) => {
   return id.split('-').at(0);
 };
 
+export const getMoodEmoji = (emotion: string) => {
+  let url;
+
+  switch (emotion.toUpperCase()) {
+    case 'ANGRY':
+      url = '/images/moods/angry.png';
+      break;
+    case 'SAD':
+      url = '/images/moods/sad.png';
+      break;
+    case 'NEUTRAL':
+      url = '/images/moods/neutral.png';
+      break;
+    case 'HAPPY':
+      url = '/images/moods/happy.png';
+      break;
+    default:
+      url = '/images/moods/no-mood.png';
+      break;
+  }
+
+  return url;
+};
+
 // SPOTIFY
 export const generatePlaylistName = (mood: Mood) => {
   const name = `EMOCIFY ${mood.emotion} (${getMoodShortID(mood.id!)})`;

@@ -11,7 +11,7 @@
       <p class="text-2xl font-bold tracking-tight">Detalles de Mood</p>
     </div>
     <div class="mt-4">
-      <p>{{ currentMood }}</p>
+      <MoodDetails :mood="currentMood!" />
     </div>
   </div>
 </template>

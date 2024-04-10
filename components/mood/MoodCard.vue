@@ -38,27 +38,7 @@
   const { mood } = toRefs(props);
 
   const imageURL = computed(() => {
-    let url;
-
-    switch (mood.value.emotion.toUpperCase()) {
-      case 'ANGRY':
-        url = '/images/moods/angry.png';
-        break;
-      case 'SAD':
-        url = '/images/moods/sad.png';
-        break;
-      case 'NEUTRAL':
-        url = '/images/moods/neutral.png';
-        break;
-      case 'HAPPY':
-        url = '/images/moods/happy.png';
-        break;
-      default:
-        url = '/images/moods/no-mood.png';
-        break;
-    }
-
-    return url;
+    return getMoodEmoji(mood.value.emotion);
   });
 </script>
 
