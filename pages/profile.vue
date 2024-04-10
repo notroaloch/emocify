@@ -33,6 +33,7 @@
               <UIcon
                 :name="countryIcon ? countryIcon : 'i-material-symbols-globe'"
                 class="h-[15px] w-[15px]"
+                dynamic
               />
               <p>{{ user?.country }}</p>
             </div>
