@@ -1,9 +1,9 @@
 <template>
   <!-- MAIN CONTAINER -->
-  <div class="group flex w-[200px] flex-col">
+  <div class="group flex w-[200px] select-none flex-col">
     <!-- IMAGE ARTWORK -->
     <div
-      class="h-[200px] w-[200px] overflow-clip shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
+      class="pointer-events-none h-[200px] w-[200px] overflow-clip shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
     >
       <NuxtImg :src="imageURL" />
     </div>

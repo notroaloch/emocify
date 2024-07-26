@@ -3,7 +3,7 @@
     <slot name="header"></slot>
     <div
       v-dragscroll
-      class="w-ful grid cursor-grab grid-flow-col-dense gap-8 overflow-x-scroll py-1"
+      class="w-ful no-scrollbar grid cursor-grab grid-flow-col-dense gap-8 overflow-x-scroll py-1"
     >
       <slot></slot>
     </div>

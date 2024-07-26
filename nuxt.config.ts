@@ -24,6 +24,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
+      svmModelUrl: '',
       supabaseRedirectUrl: '',
       spotifyScopes: '',
     },

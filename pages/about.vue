@@ -82,7 +82,7 @@
     },
     {
       id: 2,
-      label: 'Proyecto Ganador del Primer Lugar (Modulares INNI 2023B)',
+      label: 'Reconocimiento Primer Lugar (Feria de Modulares INNI 2023B)',
       href: '/pdf/emocify-award.pdf',
     },
   ];

@@ -1,10 +1,10 @@
 <template>
   <div
-    class="group flex w-[280px] cursor-grab items-center gap-4 rounded-lg border-t p-4 shadow-sm dark:border-gray-800 hover:dark:shadow-gray-800"
+    class="group flex w-[280px] cursor-grab select-none items-center gap-4 rounded-lg border-t p-4 shadow-sm dark:border-gray-800 hover:dark:shadow-gray-800"
   >
     <NuxtImg
       :src="imageURL"
-      class="w-[90px] rounded-full shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg group-hover:dark:shadow-gray-800"
+      class="pointer-events-none w-[90px] rounded-full shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg group-hover:dark:shadow-gray-800"
     />
     <div class="flex-1 transition-transform group-hover:translate-x-1">
       <div class="flex cursor-pointer items-center">
