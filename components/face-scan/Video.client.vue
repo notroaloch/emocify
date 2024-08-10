@@ -59,6 +59,8 @@
       >
         <!-- VIDEO -->
         <video
+          muted
+          playsinline
           autoplay
           ref="video"
           @loadeddata="predictWebcam"
