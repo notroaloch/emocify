@@ -20,6 +20,7 @@
     "@iconify-json/circle-flags": "^1.2.0",
     "@iconify-json/ph": "^1.2.0",
     "@iconify-json/streamline": "^1.2.0",
+    "@nuxt/eslint": "^0.5.5",
     "@nuxt/fonts": "^0.7.2",
     "@nuxt/image": "^1.8.0",
     "@nuxt/ui": "^2.18.4",
@@ -27,9 +28,11 @@
     "@pinia/nuxt": "^0.5.4",
     "@vueuse/nuxt": "^11.0.3",
     "dayjs-nuxt": "^2.1.9",
+    "eslint": "^9.9.1",
     "nuxt": "^3.11.2",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.13",
-    "supabase": "^1.151.1"
+    "supabase": "^1.151.1",
+    "typescript": "^5.5.4"
   }
 }

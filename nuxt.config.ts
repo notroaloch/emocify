@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'dayjs-nuxt',
     '@nuxt/fonts',
+    '@nuxt/eslint',
   ],
   runtimeConfig: {
     public: {
