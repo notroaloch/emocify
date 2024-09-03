@@ -33,7 +33,6 @@
               size="md"
               class="col-span-3"
               placeholder="Selecciona una cámara"
-              icon="i-material-symbols-video-camera-front-outline-rounded"
               v-model="currentVideoDevice"
               by="deviceId"
               :options="videoDevices"
@@ -75,11 +74,7 @@
         >
           <!-- PLAY/PAUSE BUTTON -->
           <UIcon
-            :name="
-              isFaceMeshActive
-                ? 'i-streamline-entertainment-control-button-pause-2-button-television-buttons-movies-tv-pause-video-controls'
-                : 'i-streamline-entertainment-control-button-play-button-television-buttons-movies-play-tv-video-controls'
-            "
+            :name="isFaceMeshActive ? 'ph:pause' : 'ph:play'"
             class="h-6 w-6 cursor-pointer text-white transition-transform hover:scale-110 hover:animate-none"
             :class="{ 'animate-pulse': isFaceMeshActive }"
             @click="handleFaceMeshToggle"
@@ -309,17 +304,17 @@
     switch (cameraPermission.value) {
       case 'denied':
         text = 'Uso de cámara no autorizado';
-        name = 'i-material-symbols-block';
+        name = 'ph:x-circle';
         color = 'text-red-500';
         break;
       case 'prompt':
         text = 'Autoriza el uso de cámara';
-        name = 'i-material-symbols-error-circle-rounded-outline-sharp';
+        name = 'ph:warning-circle';
         color = 'text-gray-500';
         break;
       case 'granted':
         text = 'Uso de cámara autorizado';
-        name = 'i-material-symbols-check-circle-outline';
+        name = 'ph:check-circle';
         color = 'text-green-500';
         break;
       default:
@@ -332,9 +327,9 @@
   });
 
   const cameraStatusStyles = computed(() => {
-    const name = isStreaming
-      ? 'i-material-symbols-video-camera-front-outline-rounded'
-      : 'i-material-symbols-video-camera-front-off-outline-rounded';
+    const name = isStreaming.value
+      ? 'ph:video-camera'
+      : 'ph:video-camera-slash';
 
     const color =
       isStreaming.value === true ? 'text-green-500' : 'text-red-500';

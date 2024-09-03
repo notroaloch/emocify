@@ -5,7 +5,7 @@
     <!-- ABOUT TEXT -->
     <div class="flex items-center gap-5">
       <UIcon
-        name="i-streamline-face-scan-1"
+        name="streamline:face-scan-1"
         class="text-primary h-[40px] w-[40px]"
       />
     </div>

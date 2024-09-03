@@ -4,6 +4,8 @@
   >
     <NuxtImg
       :src="imageURL"
+      format="webp"
+      loading="lazy"
       class="pointer-events-none w-[90px] rounded-full shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg group-hover:dark:shadow-gray-800"
     />
     <div class="flex-1 transition-transform group-hover:translate-x-1">
@@ -14,7 +16,7 @@
           >{{ mood.emotion }}</NuxtLink
         >
         <UIcon
-          name="i-material-symbols-arrow-outward-rounded"
+          name="ph:arrow-up-right"
           class="group-hover:text-primary h-[15px] w-[15px]"
         />
       </div>

@@ -22,7 +22,7 @@
             {{ user?.display_name }}
           </p>
           <UIcon
-            name="i-material-symbols-arrow-outward-rounded"
+            name="ph:arrow-up-right"
             class="group-hover:text-primary h-[15px] w-[15px]"
           />
         </div>
@@ -31,9 +31,8 @@
           <UBadge color="white" variant="solid" class="w-fit">
             <div class="flex gap-2">
               <UIcon
-                :name="countryIcon ? countryIcon : 'i-material-symbols-globe'"
+                :name="countryIcon ? countryIcon : 'ph:globe-hemisphere-west'"
                 class="h-[15px] w-[15px]"
-                dynamic
               />
               <p>{{ user?.country }}</p>
             </div>
@@ -72,7 +71,7 @@
 
   watch(user, () => {
     if (!user) return;
-    countryIcon.value = 'i-circle-flags-' + user.value?.country.toLowerCase();
+    countryIcon.value = 'circle-flags:' + user.value?.country.toLowerCase();
     productType.value =
       user.value?.product === 'free' ? 'Spotify Básico' : 'Spotify Premium';
   });

@@ -2,7 +2,7 @@
   <div class="mb-24 mt-2">
     <div class="flex items-center gap-2">
       <UButton
-        icon="i-material-symbols-arrow-back-ios-new-rounded"
+        icon="ph:arrow-left"
         color="white"
         class="transition-transform hover:scale-125"
         variant="link"

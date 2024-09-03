@@ -1,7 +1,7 @@
 <template>
   <UButton
     class="w-fit"
-    icon="i-logos-spotify-icon"
+    icon="logos:spotify-icon"
     size="xl"
     color="primary"
     variant="link"

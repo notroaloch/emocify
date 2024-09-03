@@ -4,7 +4,7 @@
     <!-- TABLE -->
     <div class="flex w-full flex-col gap-2 border-t pt-2 dark:border-gray-800">
       <UButton
-        icon="i-material-symbols-delete-outline-rounded"
+        icon="ph:trash"
         color="red"
         variant="ghost"
         class="w-fit"
@@ -23,11 +23,7 @@
         :loading="isLoading"
       >
         <template #actions-data="{ row }">
-          <UButton
-            variant="link"
-            icon="i-material-symbols-visibility-outline-rounded"
-            @click="handleViewClick(row)"
-          />
+          <UButton variant="link" icon="ph:eye" @click="handleViewClick(row)" />
         </template>
       </UTable>
     </div>

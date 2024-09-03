@@ -2,7 +2,7 @@
   <nav class="flex h-[60px] items-center gap-6">
     <div class="flex-1">
       <UButton
-        icon="i-streamline-face-scan-1"
+        icon="streamline:face-scan-1"
         size="sm"
         color="primary"
         square

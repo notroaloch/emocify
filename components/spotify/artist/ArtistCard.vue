@@ -5,7 +5,7 @@
     <div
       class="pointer-events-none h-[200px] w-[200px] overflow-clip shadow-md group-hover:shadow-xl group-hover:dark:shadow-gray-800"
     >
-      <NuxtImg :src="imageURL" />
+      <NuxtImg :src="imageURL" format="webp" loading="lazy" />
     </div>
     <!-- DATA CONTAINER -->
     <div
@@ -20,13 +20,13 @@
           {{ artist.name }}
         </p>
         <UIcon
-          name="i-material-symbols-arrow-outward-rounded"
+          name="ph:arrow-up-right"
           class="group-hover:text-primary h-[15px] w-[15px]"
         />
       </div>
       <!-- SPOTIFY DATA ATTRIBUTION -->
       <div class="mt-2 flex items-center gap-1 text-gray-500">
-        <UIcon name="i-mdi-spotify" class="h-[21px] w-[21px]" />
+        <UIcon name="logos:spotify-icon" class="h-[21px] w-[21px]" />
         <p class="text-sm font-extralight tracking-tight">Datos de Spotify</p>
       </div>
     </div>
