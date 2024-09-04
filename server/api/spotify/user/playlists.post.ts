@@ -38,19 +38,21 @@ export default defineEventHandler(async (event) => {
 
   const spotifyUserID = user.identities?.at(0)?.id;
 
-  const playlist: Playlist = await $fetch(`/users/${spotifyUserID}/playlists`, {
-    method: 'POST',
-    baseURL: spotifyAPI.baseURL,
-    headers: {
-      Authorization: 'Bearer ' + authToken,
-    },
-    body: {
-      name,
-      public: isPublic,
-      collaborative,
-      description,
-    },
-  });
+  const playlist = await spotifyApi<Playlist>(
+    `/users/${spotifyUserID}/playlists`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + authToken,
+      },
+      body: {
+        name,
+        public: isPublic,
+        collaborative,
+        description,
+      },
+    }
+  );
 
   return playlist;
 });

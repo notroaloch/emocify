@@ -23,9 +23,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await $fetch(`/playlists/${id}/tracks`, {
+  await spotifyApi(`/playlists/${id}/tracks`, {
     method: 'POST',
-    baseURL: spotifyAPI.baseURL,
     headers: {
       Authorization: 'Bearer ' + authToken,
     },

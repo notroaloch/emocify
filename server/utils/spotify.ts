@@ -1,19 +1,7 @@
-export const spotifyAPI = {
-  baseURL: 'https://api.spotify.com/v1',
-  endpoints: {
-    getCurrentUser: '/me',
-    getCurrentUserTopItems: '/me/top',
-    getCurrentUserPlaylists: '/me/playlists',
-    getCurrentUserFollowedArtists: '/me/following',
-    getSeveralTracksAudioFeatures: '/audio-features',
-  },
-};
-
 export const getArtistTopTracks = async (authToken: string, artist: Artist) => {
-  const { tracks }: ArtistTopTracksResponse = await $fetch(
-    '/artists/' + artist.id + '/top-tracks',
+  const { tracks } = await spotifyApi<ArtistTopTracksResponse>(
+    `/artists/${artist.id}/top-tracks`,
     {
-      baseURL: spotifyAPI.baseURL,
       headers: {
         Authorization: 'Bearer ' + authToken,
       },
@@ -27,12 +15,11 @@ export const getSeveralTracksAudioFeatures = async (
   authToken: string,
   tracks: Track[]
 ) => {
-  let ids = tracks.map((track: Track) => track.id).join(',');
+  const ids = tracks.map((track: Track) => track.id).join(',');
 
-  const { audio_features }: TracksAudioFeaturesResponse = await $fetch(
-    spotifyAPI.endpoints.getSeveralTracksAudioFeatures,
+  const { audio_features } = await spotifyApi<TracksAudioFeaturesResponse>(
+    '/audio-features',
     {
-      baseURL: spotifyAPI.baseURL,
       headers: {
         Authorization: 'Bearer ' + authToken,
       },
