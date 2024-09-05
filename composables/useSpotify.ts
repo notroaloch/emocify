@@ -1,107 +1,60 @@
 export const useSpotify = () => {
-  const spotifyStore = useSpotifyStore();
-  const {
-    user,
-    userTopTracks,
-    userTopArtists,
-    userFollowedArtists,
-    userPlaylists,
-    currentPlaylist,
-  } = storeToRefs(spotifyStore);
+  const { topTracks, followedAndTopArtist } = storeToRefs(useSpotifyStore());
 
-  const { currentMood } = useMood();
+  const getRecommendationSeeds = () => {
+    console.log('get recomendation', topTracks.value);
+    console.log('get recomendation', followedAndTopArtist.value);
 
-  const getUser = async () => {
-    const data: SpotifyUser = await $fetch('/api/spotify/user', {
-      headers: useRequestHeaders(['cookie']),
-    });
+    const trackSeed = topTracks.value?.map((track) => track.id).at(0);
+    const artistSeed = followedAndTopArtist.value
+      ?.map((artist) => artist.id)
+      .at(0);
 
-    user.value = data;
-    return data;
+    return { trackSeed, artistSeed };
   };
 
-  const getUserTopTracks = async () => {
-    const data: Track[] = await $fetch('/api/spotify/user/top-items', {
-      headers: useRequestHeaders(['cookie']),
-      query: {
-        type: 'tracks',
+  const getAudioFeaturesConfig = (mood: Mood) => {
+    const config = {
+      ANGRY: {
+        valence: [0, 0.4],
+        energy: [0.5, 1],
+        danceability: [0.3, 0.7],
       },
-    });
-
-    userTopTracks.value = data;
-    return data;
-  };
-
-  const getUserTopArtists = async () => {
-    const data: Artist[] = await $fetch('/api/spotify/user/top-items', {
-      headers: useRequestHeaders(['cookie']),
-      query: {
-        type: 'artists',
+      SAD: {
+        valence: [0, 0.4],
+        energy: [0, 0.5],
+        danceability: [0, 0.5],
       },
-    });
+      NEUTRAL: {
+        valence: [0.4, 0.6],
+        energy: [0.4, 0.6],
+        danceability: [0.4, 0.6],
+      },
+      HAPPY: {
+        valence: [0.6, 1],
+        energy: [0.5, 1],
+        danceability: [0.5, 1],
+      },
+    };
 
-    userTopArtists.value = data;
-    return data;
+    return config[mood.emotion] ? config[mood.emotion] : config.NEUTRAL;
   };
 
-  const getUserFollowedArtists = async () => {
-    const data: Artist[] = await $fetch('/api/spotify/user/followed-artists', {
-      headers: useRequestHeaders(['cookie']),
-    });
-    userFollowedArtists.value = data;
-    return data;
-  };
+  const createMoodPlaylist = async (mood: Mood) => {
+    // TODO: GET MOOD ACOUSTIC PARAMETERS
+    const { getAudioFeaturesMoodConfig } = useMood();
+    const { valence, energy, danceability } = getAudioFeaturesMoodConfig(mood);
 
-  const getUserPlaylists = async () => {
-    const data: Playlist[] = await $fetch('/api/spotify/user/playlists', {
-      headers: useRequestHeaders(['cookie']),
-    });
+    // TODO: CREATE SEED (5 TRACKS/ARTISTS)
+    const { trackSeed, artistSeed } = getRecommendationSeeds();
 
-    userPlaylists.value = data;
-    return data;
-  };
+    // TODO: CREATE PLAYLIST
 
-  const createMoodedPlaylist = async (mood: Mood) => {
-    const name = generatePlaylistName(mood);
-    const description = generatePlaylistDescription();
-    const artists = getArtistsAsUniqueArray(
-      userTopArtists.value!,
-      userFollowedArtists.value!
-    );
-
-    const data: { mood: Mood; playlist: Playlist } = await $fetch(
-      '/api/spotify/user/mooded-playlist',
-      {
-        method: 'POST',
-        headers: useRequestHeaders(['cookie']),
-        body: {
-          name,
-          description,
-          artists,
-          mood,
-        },
-      }
-    );
-
-    userPlaylists.value?.unshift(data.playlist);
-    currentPlaylist.value = data.playlist;
-    currentMood.value = data.mood;
-
-    return data;
+    // TODO: ADD SONGS TO PLAYLIST
   };
 
   return {
-    user,
-    userTopTracks,
-    userTopArtists,
-    userFollowedArtists,
-    userPlaylists,
-    currentPlaylist,
-    getUser,
-    getUserTopTracks,
-    getUserTopArtists,
-    getUserFollowedArtists,
-    getUserPlaylists,
-    createMoodedPlaylist,
+    getRecommendationSeeds,
+    getAudioFeaturesConfig,
   };
 };

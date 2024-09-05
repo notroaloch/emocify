@@ -1,12 +1,12 @@
-type ArtistTopTracksResponse = {
+export type ArtistTopTracksResponse = {
   tracks: Track[];
 };
 
-type TracksAudioFeaturesResponse = {
+export type TracksAudioFeaturesResponse = {
   audio_features: AudioFeatures[];
 };
 
-type FollowedArtistsResponse = {
+export type FollowedArtistsResponse = {
   artists: {
     href: string;
     limit: number;
@@ -17,7 +17,7 @@ type FollowedArtistsResponse = {
   };
 };
 
-type UserPlaylistsResponse = {
+export type UserPlaylistsResponse = {
   href: string;
   limit: number;
   next: string;
@@ -27,7 +27,7 @@ type UserPlaylistsResponse = {
   items: Playlist[];
 };
 
-type UserTopItemsResponse = {
+export type UserTopItemsResponse = {
   href: string;
   limit: number;
   next: string;

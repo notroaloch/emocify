@@ -2,7 +2,7 @@
   <div class="mb-24 mt-2 flex flex-col gap-8">
     <!-- MOODS SWIPER -->
     <UiSwiper>
-      <template v-slot:header>
+      <template #header>
         <div class="flex items-center gap-3">
           <p class="text-2xl font-bold tracking-tight">Últimos Moods</p>
           <ULink
@@ -14,35 +14,27 @@
         </div>
       </template>
       <!-- RENDERS LOADING AND EMPTY STATE -->
-      <MoodCardPlaceholder
-        v-if="isLoadingMoods || latestMoods!.length === 0"
-        :empty="isArrayEmpty(latestMoods)"
-      />
+      <MoodCardPlaceholder v-if="!moods" :empty="isArrayEmpty(moods)" />
       <!-- MOOD CARD -->
-      <MoodCard
-        v-else
-        v-for="mood in latestMoods"
-        :key="mood.id"
-        :mood="mood"
-      />
+      <MoodCard v-for="mood in moods" v-else :key="mood.id" :mood="mood" />
     </UiSwiper>
 
     <UDivider label="Estadísticas de Spotify" />
 
     <!-- TOP SONGS SWIPER -->
     <UiSwiper>
-      <template v-slot:header>
+      <template #header>
         <p class="text-2xl font-bold tracking-tight">Top de Canciones</p>
       </template>
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <SpotifyTrackPlaceholder
-        v-if="isLoadingTracks || userTopTracks!.length === 0"
-        :empty="isArrayEmpty(userTopTracks)"
+        v-if="!topTracks"
+        :empty="isArrayEmpty(topTracks)"
       />
       <!-- TRACK CARD -->
       <SpotifyTrackCard
+        v-for="track in topTracks"
         v-else
-        v-for="track in userTopTracks"
         :key="track.id"
         :track="track"
       />
@@ -50,18 +42,18 @@
 
     <!-- TOP ARTISTS SWIPER -->
     <UiSwiper>
-      <template v-slot:header>
+      <template #header>
         <p class="text-2xl font-bold tracking-tight">Top de Artistas</p>
       </template>
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <SpotifyArtistPlaceholder
-        v-if="isLoadingArtists || userTopArtists!.length === 0"
-        :empty="isArrayEmpty(userTopArtists)"
+        v-if="!topArtists"
+        :empty="isArrayEmpty(topArtists)"
       />
       <!-- ARTIST CARD -->
       <SpotifyArtistCard
+        v-for="artist in topArtists"
         v-else
-        v-for="artist in userTopArtists"
         :key="artist.id"
         :artist="artist"
       />
@@ -69,18 +61,18 @@
 
     <!-- FOLLOWED ARTISTS SWIPER -->
     <UiSwiper>
-      <template v-slot:header>
+      <template #header>
         <p class="text-2xl font-bold tracking-tight">Artistas Seguidos</p>
       </template>
       <!-- RENDERS LOADING AND EMPTY STATE -->
       <SpotifyArtistPlaceholder
-        v-if="isLoadingFollowedArtists || userFollowedArtists!.length === 0"
-        :empty="isArrayEmpty(userFollowedArtists)"
+        v-if="!followedArtists"
+        :empty="isArrayEmpty(followedArtists)"
       />
       <!-- ARTIST CARD -->
       <SpotifyArtistCard
+        v-for="artist in followedArtists"
         v-else
-        v-for="artist in userFollowedArtists"
         :key="artist.id"
         :artist="artist"
       />
@@ -89,61 +81,31 @@
 </template>
 
 <script setup lang="ts">
-  const {
-    userTopTracks,
-    userTopArtists,
-    userFollowedArtists,
-    getUserTopTracks,
-    getUserTopArtists,
-    getUserFollowedArtists,
-  } = useSpotify();
+  const { topTracks, topArtists, followedArtists } =
+    storeToRefs(useSpotifyStore());
+  const { fetchTopTracks, fetchTopArtists, fetchFollowedArtists } =
+    useSpotifyStore();
+
+  // CACHES DATA TO PREVENT API REQUESTS ON EVERY PAGE NAVIGATION
+  const nuxtApp = useNuxtApp();
+  useAsyncData('top-tracks', () => fetchTopTracks(), {
+    getCachedData(key) {
+      useAsyncDataCacheFunction(key, nuxtApp);
+    },
+  });
+  useAsyncData('top-artists', () => fetchTopArtists(), {
+    getCachedData(key) {
+      useAsyncDataCacheFunction(key, nuxtApp);
+    },
+  });
+  useAsyncData('followed-artists', () => fetchFollowedArtists(), {
+    getCachedData(key) {
+      useAsyncDataCacheFunction(key, nuxtApp);
+    },
+  });
 
   const { moods, getMoods } = useMood();
-
-  const isLoadingMoods = useState('index-isLoadingMoods', () => false);
-  const isLoadingTracks = useState('index-isLoadingTracks', () => false);
-  const isLoadingArtists = useState('index-isLoadingArtists', () => false);
-  const isLoadingFollowedArtists = useState(
-    'index-isLoadingFollowedArtists',
-    () => false
-  );
-
-  // GETS THE LATEST N MOODS
-  const latestMoods = computed(() => {
-    const numberOfMoodsToShow = 4;
-    if (!moods.value) return undefined;
-    if (moods.value?.length === 0) return [];
-    if (moods.value.length >= numberOfMoodsToShow)
-      return moods.value.slice(0, numberOfMoodsToShow);
-
-    return moods.value;
-  });
-
-  // FETCH INITIAL DATA
-  callOnce('index-callOnce', async () => {
-    isLoadingMoods.value = true;
-    isLoadingTracks.value = true;
-    isLoadingArtists.value = true;
-    isLoadingFollowedArtists.value = true;
-    if (
-      !moods.value ||
-      !userTopTracks.value ||
-      !userTopArtists.value ||
-      !userFollowedArtists.value
-    ) {
-      await Promise.all([
-        getMoods(),
-        getUserTopTracks(),
-        getUserTopArtists(),
-        getUserFollowedArtists(),
-      ]);
-
-      isLoadingMoods.value = false;
-      isLoadingTracks.value = false;
-      isLoadingArtists.value = false;
-      isLoadingFollowedArtists.value = false;
-    }
-  });
+  useAsyncData('moods', () => getMoods());
 </script>
 
 <style scoped></style>

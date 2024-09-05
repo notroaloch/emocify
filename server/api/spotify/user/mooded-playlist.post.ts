@@ -1,4 +1,4 @@
-import { serverSupabaseClient } from '#supabase/server';
+import { serverSupabaseSession } from '#supabase/server';
 
 export default defineEventHandler(async (event) => {
   const {

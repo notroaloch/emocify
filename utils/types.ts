@@ -1,4 +1,4 @@
-type Mood = {
+export type Mood = {
   id?: string;
   emotion: string;
   classifierModel: string;
@@ -10,13 +10,13 @@ type Mood = {
   userID?: string;
 };
 
-type FaceLandmark = {
+export type FaceLandmark = {
   x: number;
   y: number;
   z: number;
 };
 
-type FaceBlendshape = {
+export type FaceBlendshape = {
   index: number;
   displayName: string;
   categoryName: string;
@@ -25,7 +25,7 @@ type FaceBlendshape = {
 
 // SPOTIFY INTERFACES
 
-type SpotifyUser = {
+export type SpotifyUser = {
   country: string;
   display_name: string;
   email: string;
@@ -42,7 +42,7 @@ type SpotifyUser = {
   uri: string;
 };
 
-type Artist = {
+export type Artist = {
   external_urls: { spotify: string };
   followers: { href: string; total: number };
   genres: string[];
@@ -55,7 +55,7 @@ type Artist = {
   uri: string;
 };
 
-type Track = {
+export type Track = {
   album: Album;
   artists: Artist[];
   available_markets: string[];
@@ -78,7 +78,7 @@ type Track = {
   is_local: boolean;
 };
 
-type Album = {
+export type Album = {
   album_type: string;
   total_tracks: number;
   available_markets: string[];
@@ -95,7 +95,7 @@ type Album = {
   artists: AlbumArtist[];
 };
 
-type AlbumArtist = {
+export type AlbumArtist = {
   external_urls: { spotify: string };
   href: string;
   id: string;
@@ -104,7 +104,7 @@ type AlbumArtist = {
   uri: string;
 };
 
-type Playlist = {
+export type Playlist = {
   collaborative: boolean;
   description: string;
   external_urls: { spotify: string };
@@ -129,7 +129,7 @@ type Playlist = {
   uri: string;
 };
 
-type PlaylistOwner = {
+export type PlaylistOwner = {
   external_urls: { spotify: string };
   followers?: { href: string; total: number };
   href: string;
@@ -140,7 +140,7 @@ type PlaylistOwner = {
   name?: string;
 };
 
-type AudioFeatures = {
+export type AudioFeatures = {
   acousticness: number;
   analysis_url: string;
   danceability: number;
@@ -161,7 +161,7 @@ type AudioFeatures = {
   valence: number;
 };
 
-type Image = {
+export type Image = {
   url: string;
   height: number;
   width: number;

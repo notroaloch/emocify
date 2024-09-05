@@ -40,32 +40,6 @@ export const getMoodEmoji = (emotion: string) => {
   return url;
 };
 
-// SPOTIFY
-export const generatePlaylistName = (mood: Mood) => {
-  const name = `EMOCIFY ${mood.emotion} (${getMoodShortID(mood.id!)})`;
-  return name;
-};
-
-export const generatePlaylistDescription = () => {
-  const description = 'Playlist generada automáticamente desde EMOCIFY';
-  return description;
-};
-
-export const getArtistsAsUniqueArray = (top: Artist[], followed: Artist[]) => {
-  const ids: string[] = [];
-  const artists: Artist[] = [];
-  const all: Artist[] = [top, followed].flat();
-
-  all.forEach((artist) => {
-    if (!ids.includes(artist.id)) {
-      ids.push(artist.id);
-      artists.push(artist);
-    }
-  });
-
-  return artists;
-};
-
 // UTILS
 export const isArrayEmpty = (array: any[] | undefined) => {
   if (!array) return false;

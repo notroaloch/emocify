@@ -9,10 +9,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { artists }: FollowedArtistsResponse = await $fetch(
-    spotifyAPI.endpoints.getCurrentUserFollowedArtists,
+  const { artists } = await spotifyApi<FollowedArtistsResponse>(
+    '/me/following',
     {
-      baseURL: spotifyAPI.baseURL,
       headers: {
         Authorization: 'Bearer ' + authToken,
       },

@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const user: SpotifyUser = await $fetch(spotifyAPI.endpoints.getCurrentUser, {
-    baseURL: spotifyAPI.baseURL,
+  const user = await spotifyApi<SpotifyUser>('/me', {
     headers: {
       Authorization: 'Bearer ' + authToken,
     },

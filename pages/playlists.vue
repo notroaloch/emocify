@@ -4,22 +4,23 @@
     <div>
       <div class="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-4">
         <USelectMenu
-          class="lg:hidden"
-          :disabled="isLoading"
           v-model="currentPlaylist"
-          :options="userPlaylists"
+          class="lg:hidden"
+          :loading="!playlists"
+          :disabled="!playlists"
+          :options="orderedPlaylists"
           option-attribute="name"
           by="id"
         />
         <UVerticalNavigation
-          :links="playlistNavigationItems"
+          :links="navigationItems"
           class="hidden border-r pr-1 lg:col-span-1 lg:block dark:border-gray-800"
         />
         <iframe
+          v-if="currentPlaylist"
           allow="encrypted-media"
-          v-show="currentPlaylist"
           class="h-[calc(100vh-180px)] w-full rounded-xl lg:col-span-3"
-          :src="iFrameURL"
+          :src="iFramePlaylistUrl"
           frameborder="0"
         />
       </div>
@@ -28,67 +29,40 @@
 </template>
 
 <script setup lang="ts">
-  const { userPlaylists, getUserPlaylists, currentPlaylist } = useSpotify();
-  const playlistNavigationItems = useState('playlistNavigationItems');
+  const { playlists } = storeToRefs(useSpotifyStore());
+  const { fetchPlaylists } = useSpotifyStore();
 
-  const { pending: isLoading } = useAsyncData(
-    'isLoadingUserPlaylists',
-    async () => {
-      return await getUserPlaylists();
-    }
-  );
+  const currentPlaylist = useState<Playlist>('currentPlaylist');
 
-  const iFrameURL = computed(() => {
-    if (!currentPlaylist.value) {
-      currentPlaylist.value = userPlaylists.value?.at(0)!;
-    }
+  useAsyncData('playlists', () => fetchPlaylists());
 
-    if (currentPlaylist.value) {
-      return `https://open.spotify.com/embed/playlist/${currentPlaylist.value.id}?utm_source=oembed`;
-    }
+  const iFramePlaylistUrl = computed(() => {
+    const id = currentPlaylist.value?.id;
+    return `https://open.spotify.com/embed/playlist/${id}?utm_source=oembed`;
   });
 
-  watch([userPlaylists, currentPlaylist], () => {
-    if (!currentPlaylist.value || !userPlaylists.value) {
-      return;
-    }
+  const orderedPlaylists = computed(() => {
+    return playlists.value?.toSorted((a, b) => {
+      if (a.name.includes('EMOCIFY') && !b.name.includes('EMOCIFY')) return -1;
+      else if (!a.name.includes('EMOCIFY') && b.name.includes('EMOCIFY'))
+        return 1;
+      else return 0;
+    });
+  });
 
-    const normalPlaylists: any[] = [];
-    const emocifyPlaylists: any[] = [];
-
-    userPlaylists.value.forEach((playlist) => {
-      const p = {
+  const navigationItems = computed(() => {
+    return orderedPlaylists.value?.map((playlist) => {
+      return {
         label: playlist.name,
         labelClass:
-          currentPlaylist.value.id === playlist.id
+          currentPlaylist.value?.id === playlist.id
             ? 'text-primary border-l-4 pl-2 border-primary transition-all'
             : '',
         click: () => {
           currentPlaylist.value = playlist;
         },
       };
-
-      if (playlist.name.toUpperCase().includes('EMOCIFY')) {
-        emocifyPlaylists.push(p);
-        return;
-      }
-
-      normalPlaylists.push(p);
     });
-
-    if (emocifyPlaylists.length > 0) {
-      playlistNavigationItems.value = [emocifyPlaylists, normalPlaylists];
-    } else {
-      playlistNavigationItems.value = normalPlaylists;
-    }
-
-    currentPlaylist.value = currentPlaylist.value;
-  });
-
-  callOnce('index-callOnce', async () => {
-    if (!userPlaylists.value) {
-      await getUserPlaylists();
-    }
   });
 </script>
 

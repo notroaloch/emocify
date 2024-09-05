@@ -4,14 +4,15 @@ export default defineEventHandler(async (event) => {
   const {
     name,
     isPublic = false,
-    collaborative,
+    isCollaborative = false,
     description,
   }: {
     name: string;
     isPublic: boolean;
-    collaborative: boolean;
+    isCollaborative: boolean;
     description: string;
   } = await readBody(event);
+
   const authToken = getCookie(event, 'oauth_provider_token');
 
   if (!authToken) {
@@ -38,19 +39,21 @@ export default defineEventHandler(async (event) => {
 
   const spotifyUserID = user.identities?.at(0)?.id;
 
-  const playlist: Playlist = await $fetch(`/users/${spotifyUserID}/playlists`, {
-    method: 'POST',
-    baseURL: spotifyAPI.baseURL,
-    headers: {
-      Authorization: 'Bearer ' + authToken,
-    },
-    body: {
-      name,
-      public: isPublic,
-      collaborative,
-      description,
-    },
-  });
+  const playlist = await spotifyApi<Playlist>(
+    `/users/${spotifyUserID}/playlists`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + authToken,
+      },
+      body: {
+        name,
+        public: isPublic,
+        collaborative: isCollaborative,
+        description,
+      },
+    }
+  );
 
   return playlist;
 });

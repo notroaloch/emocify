@@ -9,19 +9,15 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { items }: UserPlaylistsResponse = await $fetch(
-    spotifyAPI.endpoints.getCurrentUserPlaylists,
-    {
-      baseURL: spotifyAPI.baseURL,
-      headers: {
-        Authorization: 'Bearer ' + authToken,
-      },
-      query: {
-        limit,
-        offset,
-      },
-    }
-  );
+  const { items } = await spotifyApi<UserPlaylistsResponse>('/me/playlists', {
+    headers: {
+      Authorization: 'Bearer ' + authToken,
+    },
+    query: {
+      limit,
+      offset,
+    },
+  });
 
   return items;
 });

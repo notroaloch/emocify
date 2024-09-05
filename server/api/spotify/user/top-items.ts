@@ -33,20 +33,16 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { items }: UserTopItemsResponse = await $fetch(
-    spotifyAPI.endpoints.getCurrentUserTopItems + `/${type}`,
-    {
-      baseURL: spotifyAPI.baseURL,
-      headers: {
-        Authorization: 'Bearer ' + authToken,
-      },
-      query: {
-        timeRange,
-        limit,
-        offset,
-      },
-    }
-  );
+  const { items } = await spotifyApi<UserTopItemsResponse>(`/me/top/${type}`, {
+    headers: {
+      Authorization: 'Bearer ' + authToken,
+    },
+    query: {
+      timeRange,
+      limit,
+      offset,
+    },
+  });
 
   return items;
 });

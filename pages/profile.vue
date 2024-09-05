@@ -5,12 +5,7 @@
       class="flex w-full gap-8 overflow-clip rounded-lg border p-6 shadow-lg md:w-1/2 dark:border-gray-800"
     >
       <Ui3DCard>
-        <NuxtImg
-          :src="
-            user?.images ? user.images.at(1)!.url : 'https://placehold.co/400'
-          "
-          class="w-[200px] shadow-lg"
-        />
+        <NuxtImg :src="profilePictureUrl" class="w-[200px] shadow-lg" />
       </Ui3DCard>
       <div class="flex w-full flex-col gap-3">
         <!-- USER DISPLAY NAME AND EXTERNAL LINKT TO PROFILE -->
@@ -19,7 +14,7 @@
             class="group-hover:text-primary line-clamp-1 text-3xl font-semibold tracking-tight"
             @click="handleClick"
           >
-            {{ user?.display_name }}
+            {{ displayName }}
           </p>
           <UIcon
             name="ph:arrow-up-right"
@@ -30,16 +25,13 @@
           <!-- COUNTRY -->
           <UBadge color="white" variant="solid" class="w-fit">
             <div class="flex gap-2">
-              <UIcon
-                :name="countryIcon ? countryIcon : 'ph:globe-hemisphere-west'"
-                class="h-[15px] w-[15px]"
-              />
-              <p>{{ user?.country }}</p>
+              <UIcon :name="country.icon" class="h-[15px] w-[15px]" />
+              <p>{{ country.name }}</p>
             </div>
           </UBadge>
           <!-- FOLLOWERS -->
           <UBadge color="white" variant="solid" class="w-fit"
-            >Seguidores {{ user?.followers.total }}
+            >Seguidores {{ followers }}
           </UBadge>
           <!-- SPOTIFY PRODUCT TYPE -->
           <UBadge color="white" variant="solid" class="w-fit">{{
@@ -58,22 +50,38 @@
 </template>
 
 <script setup lang="ts">
-  const { user, getUser } = useSpotify();
-  const countryIcon = useState('countryIcon');
-  const productType = useState('productType');
+  const { user } = storeToRefs(useSpotifyStore());
+  const { fetchUser } = useSpotifyStore();
 
-  const { pending: isLoading } = useAsyncData(
-    'isLoadingUserPlaylists',
-    async () => {
-      return await getUser();
-    }
-  );
+  const productType = computed(() => {
+    return user.value?.product.toUpperCase();
+  });
+  const followers = computed(() => {
+    return user.value?.followers.total;
+  });
 
-  watch(user, () => {
-    if (!user) return;
-    countryIcon.value = 'circle-flags:' + user.value?.country.toLowerCase();
-    productType.value =
-      user.value?.product === 'free' ? 'Spotify Básico' : 'Spotify Premium';
+  const country = computed(() => {
+    return {
+      name: user.value?.country ? user.value.country : 'Tierra',
+      icon: user.value?.country
+        ? `circle-flags:${user.value.country.toLowerCase()}`
+        : 'ph-globe-hemisphere-west',
+    };
+  });
+
+  const displayName = computed(() => {
+    return user.value?.display_name;
+  });
+  const profilePictureUrl = computed(() => {
+    return user.value?.images.at(1).url;
+  });
+
+  // CACHES DATA TO PREVENT API REQUESTS ON EVERY PAGE NAVIGATION
+  const nuxtApp = useNuxtApp();
+  useAsyncData('user', () => fetchUser(), {
+    getCachedData(key) {
+      useAsyncDataCacheFunction(key, nuxtApp);
+    },
   });
 
   const handleClick = async () => {
@@ -83,12 +91,6 @@
       },
     });
   };
-
-  callOnce('index-callOnce', async () => {
-    if (!user.value) {
-      await getUser();
-    }
-  });
 </script>
 
 <style scoped></style>
