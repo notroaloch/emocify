@@ -4,14 +4,15 @@ export default defineEventHandler(async (event) => {
   const {
     name,
     isPublic = false,
-    collaborative,
+    isCollaborative = false,
     description,
   }: {
     name: string;
     isPublic: boolean;
-    collaborative: boolean;
+    isCollaborative: boolean;
     description: string;
   } = await readBody(event);
+
   const authToken = getCookie(event, 'oauth_provider_token');
 
   if (!authToken) {
@@ -48,7 +49,7 @@ export default defineEventHandler(async (event) => {
       body: {
         name,
         public: isPublic,
-        collaborative,
+        collaborative: isCollaborative,
         description,
       },
     }
